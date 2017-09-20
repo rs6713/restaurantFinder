@@ -1,0 +1,409 @@
+/* Theme colours are orange and blue originally but subject to change
+$baseColor: #F06D06;
+
+map marker colours EE6237
+*/
+html, body{
+    width:100%;
+    height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:14px;
+    color:white;
+    overflow:hidden;
+}
+
+#filters{
+    background-color:#3A4D9E;
+    height:100vh;
+    padding:20vh 0 0 0;
+    overflow-y:auto;
+}
+    .filter{
+        padding: 2em 1em;
+        width:100%;
+        margin:0;
+        border-bottom: 1px  solid #6A7DCE;
+        background-color:#3A4D9E;
+        line-height:1em;
+        position:relative;
+    }
+        .fiter span{
+            float:left;
+          
+        }
+        .filter i, input{
+            float:right;
+           
+        }
+        .filter .ball{
+            height:0.8em;
+            width:0.8em;
+            border-radius:0.8em;
+            position:absolute;
+            bottom:0;
+            left:50%;
+            background-color:white;
+            transform: translateY(50%);
+            z-index:3;
+        }
+        .filter .point{
+            height:0.5em;
+            width:0.5em;
+            border-radius:0.5em;
+            position:absolute;
+            transform: translateY(50%);
+            position:absolute;
+            bottom:0;
+            z-index:2;
+            background-color:#6A7DCE;
+        }
+        .checked{
+            background-color:#6A7DCE;
+        }   
+            .dropdown{
+                width:100%;
+                z-index:3;
+                display:none;
+
+            }
+            .dropdown span{
+                width:100%;
+                padding:1em 1em;
+                display:block;
+                background-color:#6A7DCE;
+                border-bottom: 1px solid #3A4D9E;
+                line-height:1em;
+            }
+        #filterslider{
+            width:100%;
+            margin:0em;
+            padding:0 1em;
+            position:relative;
+            top:3.5em;
+            left:0;
+            z-index:10;
+            box-sizing:border-box;
+        }
+        #rating, #price{
+            padding: 2em 1em 3em 1em;
+        }
+            #filterslider .rz-pointer{
+                width:1em;
+                height:1em;
+                top:-0.5em;
+                background-color:white;
+            }
+                #filterslider .rz-pointer:after{
+                    width:0.5em;
+                    height:0.5em;
+                    top:0.25em;
+                    left:0.25em;
+                    background-color:#6A7DCE;
+                    display:none;
+                }
+            #filterslider .rz-bar{
+                background:#6A7DCE;
+                height:1px;
+            }
+            #filterslider .rz-bubble{
+                color:#6A7DCE;
+                
+            }
+            #filterslider .rz-tick{
+                width:0.5em;
+                height:0.5em;
+                background-color:#6A7DCE;
+                left:-0.55em;
+                
+            }
+
+
+#views{
+    height:100vh;
+    padding:10vh 0 0 0 ;
+    margin:0;
+    background-color:#212121; 
+    cursor:pointer;
+}
+
+    #views .page{
+        padding: 2em 0;
+        text-align:center;
+        width:100%;
+        margin:0;
+        background-color:#212121;
+    }
+        #views .page i{
+            font-size:3em;
+            margin-bottom:0.2em;
+        }
+
+
+
+#mapContainer{
+    height:100vh;
+    position:relative;
+    padding:0;
+}
+    #map{
+        width:100%;
+        height:100%;
+    }
+    #mapContainer #submit{
+        display:none;
+        padding:2em;
+        color:#212121;
+        overflow-y:auto;
+    }
+        #mapContainer #submit td{
+            padding-right:2em;
+            padding-bottom:1em;
+            text-align:bottom;
+        }
+        #mapContainer #submit h3{
+            margin-bottom:1em;
+        }
+        #mapContainer #submit table td:first-child{
+            font-weight:bold;
+        }
+        #mapContainer #submit tr:last-child button{
+            float:right;
+        }
+            #ratingslider{
+                width:100%;
+                position:relative;
+            }
+
+            #submit .rz-pointer{
+                width:1em;
+                height:1em;
+                top:-0.5em;
+                background-color:#3A4D9E;
+            }
+            
+                #submit .rz-pointer:after{
+                    width:0.5em;
+                    height:0.5em;
+                    top:0.25em;
+                    left:0.25em;
+                    background-color:#6A7DCE;
+                    display:none;
+                }
+               
+            #submit .rz-bar{
+                background:#6A7DCE;
+                height:2px;
+            }
+            #submit .rz-tick{
+                width:0.5em;
+                height:0.5em;
+                background-color:#6A7DCE;
+                left:-0.55em;
+            }
+            
+            #submit .rz-bubble{
+                color:#212121;
+                
+            }
+           
+            #submit .rz-selection{
+                color:#3A4D9E;
+            }
+
+            
+
+
+#restaurantPopUp{
+    width:100%;
+    max-height:100vh;
+    position:absolute;
+    top:200%;
+    transform: translateY(-100%);
+    background-color:white;
+    color: #3a3a3a;
+    padding:3em 2em 2em 2em;
+    z-index:11;
+    transition: 0.5s ease-out;
+}
+    #restaurantPopUp #circle{
+        height:4.2em;
+        width:4.2em;
+        position:relative;
+        text-align:center;
+        top:0.4em;
+        left:0.4em;
+        font-size:1em;
+        padding-top:1.5em;
+        overflow:hidden;
+        font-weight:bold;
+        border-radius:100%;
+        background-color: white;
+    } 
+        #circle h4{
+            font-weight:bold;
+            color: #3a3a3a;
+        }
+   
+    #restaurantPopUp #circlePercent{
+        height:5em;
+        width:5em;
+        position:absolute;
+        top:0%;
+        line-height:1;
+        transform: translateY(-50%);
+        right:1em;
+        border-radius:100%;
+        background-color:#3A4D9E;
+        background-image:
+            linear-gradient(-90deg, transparent 50%, #6A7DCE 50%),
+            linear-gradient(90deg, #6A7DCE 50%, transparent 50%);    
+        
+    }
+
+
+                
+
+
+    #restaurantInfo {
+        font-size:1em;
+    }
+        #restaurantPopUp h3{
+            padding-bottom:0.5em;
+        }
+            #restaurantInfo td:first-child{
+                font-weight:bold;
+                padding-right:1em;
+                padding-bottom:0.5em;
+            }
+
+    #restaurantPopUp #btns{
+        position:absolute;
+        top:0px;
+        right:7em;
+    }
+        #restaurantPopUp #btns #infoBtn{
+            background-color:#3A4D9E;
+        }
+        #restaurantPopUp #btns span{
+            padding:0.2em 0.5em;
+            margin-left:0.1em;
+            display:inline-block;
+            background-color:#3a3a3a;
+            color:white;
+            font-size:1em;
+            border-bottom-left-radius: 0.5em;
+            border-bottom-right-radius: 0.5em;
+        }
+    #restaurantPopUp #reviews{
+        max-height:40vh;
+        overflow-y:scroll;
+        display:none;
+    }
+        #restaurantPopUp #reviews div{
+            border-radius:0.5em;
+            width:100%;
+            padding:0.5em 1em;
+            color:white;
+            /*#3a3a3a;*/
+        }
+            #restaurantPopUp #reviews div:nth-child(odd){
+                background-color: rgba(58,77,158,1);
+            }
+            #restaurantPopUp #reviews div:nth-child(even){
+                background-color: rgba(106,125,206,1);
+            }
+
+
+.btn-primary{
+    background-image: linear-gradient(to bottom,#6A7DCE 0,#3A4D9E 100%);
+    border-color:#3A4D9E;
+    background-color:#6A7DCE ;
+}
+.btn-primary:focus{
+    background-color:#3A4D9E;
+}
+.btn-primary.focus{
+    background-color:#3A4D9E;
+}
+
+.btn-primary:active:focus{
+    background-color: #3A4D9E;
+}
+.btn-primary:active.focus{
+    background-color: #3A4D9E;
+}
+.btn-primary.active:focus{
+    background-color: #3A4D9E;
+}
+.btn-primary.active.focus{
+    background-color: #3A4D9E;
+}
+
+#cuisineDropDown.focus{
+    background-color: #3A4D9E;  
+}
+#cuisineDropDown:focus{
+    background-color: #3A4D9E;  
+}
+#cuisineDropDown.active{
+    background-color: #3A4D9E;  
+}
+#cuisineDropDown:active{
+    background-color: #3A4D9E;  
+}
+
+.btn-primary.dropdown-toggle.active:focus{
+    background-color: #3A4D9E;  
+}
+.btn-primary.dropdown-toggle:active:focus{
+    background-color: #3A4D9E;  
+}
+.btn-primary.dropdown-toggle.active.focus{
+    background-color: #3A4D9E;  
+}
+.btn-primary.dropdown-toggle:active.focus{
+    background-color: #3A4D9E;  
+}
+
+.btn-primary:active:hover{
+    background-color: #3A4D9E;
+}
+.btn-primary:active.hover{
+    background-color: #3A4D9E;
+}
+.btn-primary.active:hover{
+    background-color: #3A4D9E;
+}
+.btn-primary.active.hover{
+    background-color: #3A4D9E;
+}
+.btn-primary.active{
+    background-color: #3A4D9E;
+    border-color: #6A7DCE;
+}
+.btn-primary:active{
+    background-color: #3A4D9E;
+    border-color: #6A7DCE;   
+}
+.btn-primary:hover{
+    background-color: #3A4D9E;
+    border-color: #6A7DCE;
+}
+.btn-primary.hover{
+    background-color: #3A4D9E;
+    border-color: #6A7DCE;
+}
+
+#enter-name input.ng-invalid,  #enter-address input.ng-invalid {
+    border-color: rgba(238,98,55,1);
+    
+}
+#enter-name input.ng-valid, #enter-address input.ng-valid {
+    border-color: rgba(124,184,68,1);
+}
+
+#mainSubmit:disabled{
+    background-color:grey;
+    border-color:black;
+}
+

@@ -1,0 +1,26 @@
+[
+    {
+        "name": "joes southern",
+        "cuisine" : ["american"],
+        "area": "covent garden",
+        "address": "WC2E 8JD",
+        "occasion": ["lunch"],
+        "website": "unknown",
+        "reviews": ["Fairly quiet at midday, service can be sluggish"],
+        "outdoor seating": "unknown",
+        "ratings":[]
+
+    },
+    {
+        "name": "da mario",
+        "cuisine" : ["italian"],
+        "area": "covent garden",
+        "address": "WC2H 9AJ",
+        "occasion": ["lunch"],
+        "website": "www.da-mario.co.uk",
+        "reviews": ["Very closeby, great for informal lunch meetings, also has outside seating"],
+        "outdoor seating": "yes",
+        "ratings":[]
+
+    }
+]

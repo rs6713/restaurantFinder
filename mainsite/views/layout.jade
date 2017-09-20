@@ -1,0 +1,304 @@
+-var prices=['£', '££', '£££']
+-var ratings=["1","2","3","4", "5"]
+
+
+doctype html
+html(ng-app="eaHelper")
+  head
+    //title= title
+    title   Officator - EA Restaurant Tool
+
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    //disable zooming capabilities
+    meta(name="viewport", content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no")
+    meta(charset="utf-8")
+
+    //Jquery JS and CSS
+    script(src="https://code.jquery.com/jquery-3.2.1.min.js",
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=",
+    crossorigin="anonymous")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
+    link(rel="stylesheet", href="https://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css")
+ 
+    //Bootstrap css
+    link( rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous") 
+    //Optional theme
+    link( rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css", integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp", crossorigin="anonymous")
+    <!-- Angular Material style sheet -->
+    link(rel="stylesheet", href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css")
+
+
+    script(src="https://use.fontawesome.com/1079ce90fa.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+    
+     //Angular
+    link(rel="stylesheet", href="lib/angularjs-slider/dist/rzslider.css")
+    script(src='/lib/angular/angular.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js")
+    script(src='/lib/angularjs-slider/dist/rzslider.js')  
+
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js")
+    //-Angular Material Library 
+    script(src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js")
+    
+    script(src='/application.js ')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type="text/javascript", src="/scripts/index.js")
+  body
+    //Menu Top Bar
+    div.container-fluid
+      div.row.justify-content-between
+    
+    //Filters and Map(Main activity)
+    div.container-fluid(ng-controller="mainController")
+      div.row
+        //Filters
+        div.col.col-sm-3.col-md-3.col-lg-3#filters
+          div.filter#category
+            span Food Category
+            i.fa.fa-chevron-down(aria-hidden="true")
+          div.dropdown(name="category")
+            //- cat options is a nameless array
+            span(ng-repeat="cat in catOptions track by $index") 
+              | {{cat.name}} 
+              //{{cat.selected}}
+              input(type="checkbox",  ng-model="catOptions[$index].selected")
+                
+              //each restaurant in restaurantlist
+                span= restaurant.name
+
+          div.filter#area
+            span Area
+            i.fa.fa-chevron-down(aria-hidden="true")
+          div.dropdown(name="area")
+            span(ng-repeat="area in areaOptions") 
+              |{{area.name}} 
+              // {{area.selected}}
+              input(type="checkbox", ng-model="area.selected")
+            //each restaurant in restaurantlist
+              span= restaurant.area
+
+          div.filter#occasion
+            span Occasion
+            i.fa.fa-chevron-down(aria-hidden="true")
+          div.dropdown(name="occasion")
+            span(ng-repeat="occ in occasionOptions") 
+              |{{occ.name}} 
+              input(type="checkbox", ng-model="occ.selected")
+
+          div.filter#outdoor-seating
+            span Outdoor Seating
+            input(type="checkbox" ng-model="outdoor")          
+
+          div.filter#price
+            span Max Price
+            //each val in prices
+              div.point(name=val)
+            //div.ball
+            rzslider#filterslider(rz-slider-model="prices_bar.value", rz-slider-options="prices_bar.options")
+          
+          div.filter#rating
+            span Min Average Rating 
+            //each val in ratings
+              div.point(name=val)
+            //div.ball
+            rzslider#filterslider(rz-slider-model="ratings_bar.value", rz-slider-options="ratings_bar.options")
+
+        
+        //Views to change page shown
+        div.col.col-sm-1.col-md-1.col-lg-1#views
+          div.page#map-view
+            i.fa.fa-map(aria-hidden="true") 
+            br 
+            |Map
+          div.page#list-view
+            i.fa.fa-th-list(aria-hidden="true")
+            br 
+            |List
+          div.page#add-view
+            i.fa.fa-plus-circle(aria-hidden="true")
+            br 
+            |Add Location
+        div.col.col-sm-8.col-md-8.col-lg-8#mapContainer
+          div#map
+          div#submit
+            h3 
+              b Enter Restaurant Details
+            //var restQualities=["address", "name", "cuisine", "outdoor seating", "website", "reviews", "avgRating", "price"];
+            
+            //Name
+            form(name="restaurantSubmissionForm")
+              table
+                tr
+                  td Name:*
+                  td
+                    .input-group#enter-name
+                      input(type="text", class="form-control", name="name",placeholder="Restaurant Name", aria-describedby="Restaurant Name", ng-model="newRestaurant.name" required min-length)
+                    span(ng-show="restaurantSubmissionForm.name.$touched && restaurantSubmissionForm.name.$invalid")
+                      | A restaurant name is required to be at least 2 chars.
+                    span(ng-show="restaurantSubmissionForm.name.$minLength")
+                      | Length of name must be above 2 chars
+                    span(ng-show="restaurantSubmissionForm.name.minLength")
+                      | Length of name must be above 2 chars
+                    span(ng-show="restaurantSubmissionForm.name.min-length")
+                      | Length of name must be above 2 chars
+                tr
+                  td Address:*
+                  td
+                    //Address
+                    .input-group#enter-address
+                      input(type="text",name="address" class="form-control",placeholder="Restaurant Address", aria-describedby="Restaurant Address", ng-model="newRestaurant.address" required min-length)
+                    span(ng-show="restaurantSubmissionForm.address.$touched && restaurantSubmissionForm.address.$invalid")
+                      | A restaurant address is required to be at least 2 chars.                
+                tr  
+                  //Website  
+                  td Website:
+                  td
+                    div.input-group
+                      span.input-group-addon#restaurant-website https://www.
+                      input.form-control#websiteSelect( aria-describedby="Select-a-website", placeholder="Restauarant Website", ng-model="newRestaurant.website" type="text")    
+
+                tr    
+                  td Price:*
+                  //Price
+                  td
+                    //#joinedbutton.btn-group
+                      label.btn.btn-primary(ng-repeat="option in priceOptions",ng-model="$parent.newRestaurant.price", uib-btn-radio="option")
+                        | {{option}}
+                    div.btn-group(data-toggle="buttons")
+                      label.btn.btn-primary(ng-repeat="opt in priceOptions", ng-click="newRestaurant.price=opt")
+                        //input(type="radio",  ng-model="newRestaurant.price",id="{{opt}}", ng-value="'{{opt}}'", name="price")
+                        input(type="radio",  ,id="{{opt}}", ng-value="{{opt}}", name="price")
+                        | {{opt}}                      
+
+                tr
+                  //Outdoor Seating
+                  td Outdoor Seating:*
+                  td
+                    div.btn-group(data-toggle="buttons", id="outdoorSelect")
+                      label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="newRestaurant.outdoorSeating=opt")
+                        input(type="radio", ng-model="newRestaurant.outdoorSeating", id="{{opt}}",  ng-value="'{{opt}}'", required, name="outdoor")
+                        | {{opt}}
+
+                tr
+                  td Categories:
+                  td    
+                    //div(ng-repeat="c in newRestaurant.cuisine")
+                      span {{c}}
+
+                    //Cuisine
+                    //.input-group
+                      span.input-group-btn
+                        button.btn.btn-primary.dropdown-toggle(type="button", id="cuisineDropDown", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+                          | Cuisine
+                          span.caret
+                        ul.dropdown-menu(data-toggle="dropdown")
+                          li(ng-click="newRestaurant.cuisine.push(cat.name)" ng-repeat="cat in catOptions")
+                            {{cat.name}}
+                      input.form-control(type="text", aria-label="Other Cuisine", placeholder="Other Cuisines", ng-model="otherCuisine")
+                      span.input-group-btn
+                        button.btn.btn-primary(type="button", ng-click="newRestaurant.cuisine.push(otherCuisine)") Add
+                    
+                    //chips showing all contents of new restaurant cuisine
+                    md-chips(ng-model="newRestaurant.cuisine", md-removable="true",
+                    md-transform-chip="undefined", md-require-match="false")
+                      //- transformChip($chip)
+                      md-autocomplete(
+                      md-autocomplete-snap, 
+                      md-items="item in querySearch(searchText)", 
+                      md-item-text="item",
+                      md-search-text="searchText",
+                      placeholder="Cuisine Type...")
+                        md-item-template
+                          span(md-highlight-text="searchText")
+                          strong {{item}}
+                      md-chip-template
+                        span
+                          strong {{$chip}}
+                    
+                    //Contact autocomplete chips require name, emails and icons
+                    //md-content(class="md-padding autocomplete", layout="column")
+                      way to enter chips
+                      md-contact-chips(
+                          ng-model="newRestaurant.cuisine",
+                          md-contacts="querySearch($query)",
+                          md-contact-name="$chip",
+                          md-require-match="true",
+                          md-highlight-flags="i",
+                          filter-selected= "true",
+                          placeholder="Food Categories")
+
+                      md-list(class="fixedRows")
+                        md-subheader(class="md-no-sticky") Cuisines
+                        Cuisines that fall into category options
+                        md-list-item(class="md-2-line contact-item", ng-repeat="c in catOptions")
+                          div(class="md-list-item-text compact")
+                            h3 Option {{c.name}}
+                        Cuisines that have been selected
+                        md-list-item(class="md-2-line contact-item selected" ng-repeat="a in newRestaurant.cuisine")
+                          div(class="md-list-item-text compact")
+                            h3 Chosen: {{a}}
+                      
+                     
+                tr
+                  td Rating:
+                  td 
+                    rzslider#ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
+                tr
+                  td Review:
+                  td
+                    .input-group#enter-review
+                      input(type="text", class="form-control",placeholder="Review", aria-describedby="Restaurant Address" ng-model="newRestaurant.review")
+                tr
+                  td
+                  td
+                    // || newRestaurant.price==null restaurantSubmissionForm.name.$invalid  restaurantSubmissionForm.name.$minLength|| restaurantSubmissionForm.price.$error.required , ng-disabled="restaurantSubmissionForm.$invalid "
+                    button.btn.btn-primary#mainSubmit(ng-click="submitRestaurant()", name="submitFormBtn",  ng-disabled="restaurantSubmissionForm.$invalid || newRestaurant.price=='' || newRestaurant.outdoorSeating==''")
+                      |Submit  
+          div#restaurantPopUp
+            div#btns
+              span#infoBtn Info
+              span#reviewsBtn Reviews
+            h3 {{chosenRestaurant.name}}
+            div#restaurantInfo
+              table
+                tr
+                  td Address:
+                  td {{chosenRestaurant.address}}
+                tr 
+                  td Cuisine:
+                  td(ng-repeat="c in chosenRestaurant.cuisine")
+                    span {{c}}
+                tr
+                  td Outdoor Seating:
+                  td {{chosenRestaurant.outdoor}}
+                tr 
+                  td Occasion:
+                  td(ng-repeat="occ in chosenRestaurant.occasion")
+                    span {{occ}}
+                tr 
+                  td Website:
+                  td {{chosenRestaurant.website}}
+              
+            div#reviews(ng-repeat="rev in chosenRestaurant.reviews")
+              div {{rev}}
+            div#circlePercent
+              div#circle
+                h4 {{chosenRestaurant.avgRating}}
+              
+                
+           
+              
+
+
+
+    
+    script(async, defer, type="text/javascript",
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADp-Jxh-mAwZfWqI8bGvF25t8glrMhpRk&callback=initMap")
+
+    
+    // block content
+
+

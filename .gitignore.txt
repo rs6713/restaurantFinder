@@ -1,0 +1,3 @@
+mainsite/node_modules/*
+mainsite/public/lib/*
+mainsite/data/*
