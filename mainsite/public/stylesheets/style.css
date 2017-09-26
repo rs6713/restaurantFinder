@@ -6,18 +6,32 @@ map marker colours EE6237
 html, body{
     width:100%;
     height:100vh;
+    max-height:100vh;
+    max-width:100%;
     font-family:Arial, Helvetica, sans-serif;
     font-size:14px;
     color:white;
     overflow:hidden;
+}
+a, a:hover, a:active {
+    color: #3A4D9E;
 }
 
 #filters{
     background-color:#3A4D9E;
     height:100vh;
     padding:20vh 0 0 0;
-    overflow-y:auto;
+    overflow:hidden;
 }
+    #innerfilters{
+        width:100%;
+        height:100%;
+        overflow-y:scroll;
+        overflow-x:hidden;
+        padding-right: 19px;
+        box-sizing: content-box;
+        
+    }
     .filter{
         padding: 2em 1em;
         width:100%;
@@ -139,11 +153,52 @@ html, body{
         }
 
 
+#list{
+    width:100%;
+    height:100%;
+    padding:2em;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    display:none;
+    color:#212121;
+    flex-direction:column;
+}
+    
+    #list md-input-container{
+        display: inline-block;
+    }
+    #list md-input-container label{
+        display:inline-block;
+    }
+    #list md-select-value span:first-child{
+        padding-right:2em;
+    }
+    #listControls{
+        width:100%;
+        flex: 0 1 auto;
+        
+    }
+    #list md-card{
+        margin: auto 0;
+    }
+    
+
+
+    #listItems{
+        width:100%;
+        flex: 1 1 auto;
+        overflow-y:scroll;
+        padding-right:10em;
+        box-sizing:content-box;
+    }
+
 
 #mapContainer{
     height:100vh;
     position:relative;
     padding:0;
+    overflow-x:hidden;
+    overflow-y:hidden;
 }
     #map{
         width:100%;
@@ -151,13 +206,35 @@ html, body{
     }
     #mapContainer #submit{
         display:none;
-        padding:2em;
+        width:100%;
+        height:100%;
+        padding-right:5em;
+        box-sizing:content-box;
         color:#212121;
-        overflow-y:auto;
+        overflow-y:scroll;
+        overflow-x:hidden;
     }
+        #mapContainer #submitContainer{
+            width:100%;
+            height:100%;
+            padding:2em;
+            overflow-x:hidden;
+        }
+        #mapContainer #submit table{
+            width:100%;
+            
+        }
+        #mapContainer #submit md-chips{
+            font-size:1em;
+        }
+        #mapContainer #submit table input{
+            width:100%;
+        }
+        #mapContainer #submit table td:last-child div{
+            width:100%;
+        }
         #mapContainer #submit td{
-            padding-right:2em;
-            padding-bottom:1em;
+            padding:0.5em 1em;
             text-align:bottom;
         }
         #mapContainer #submit h3{
@@ -165,23 +242,45 @@ html, body{
         }
         #mapContainer #submit table td:first-child{
             font-weight:bold;
+            padding-right:2em;
         }
+
         #mapContainer #submit tr:last-child button{
             float:right;
         }
             #ratingslider{
                 width:100%;
                 position:relative;
+                
+            }
+            #ratingOpinion{
+                font-size:0.5em;
+                position:absolute;
+                top:1em;
+                right:2em;
+                line-height:0.5em;
+                text-align:bottom;
+                
+            }
+                #mapContainer #submit table #ratingOpinion input{
+                    width:auto;
+                    display:inline-block;
+                    padding-left:0.2em;
+                    margin-top:0;
+                    margin-left:1em;
+                }
+            #ratingSliderContainer {
+                position:relative;
             }
 
-            #submit .rz-pointer{
+            #submit .rz-pointer, #reviews .rz-pointer{
                 width:1em;
                 height:1em;
                 top:-0.5em;
                 background-color:#3A4D9E;
             }
             
-                #submit .rz-pointer:after{
+                #submit .rz-pointer:after, #reviews .rz-pointer:after{
                     width:0.5em;
                     height:0.5em;
                     top:0.25em;
@@ -190,32 +289,43 @@ html, body{
                     display:none;
                 }
                
-            #submit .rz-bar{
+            #submit .rz-bar, #reviews .rz-bar{
                 background:#6A7DCE;
                 height:2px;
             }
-            #submit .rz-tick{
+            #submit .rz-tick, #reviews .rz-tick{
                 width:0.5em;
                 height:0.5em;
                 background-color:#6A7DCE;
                 left:-0.55em;
             }
             
-            #submit .rz-bubble{
+            #submit .rz-bubble, #reviews .rz-bubble{
                 color:#212121;
                 
             }
            
-            #submit .rz-selection{
+            #submit .rz-selection, #reviews .rz-selection{
                 color:#3A4D9E;
             }
+                #submit .rz-disabled .rz-selection {
+                    color:slategray;
+                }
+
+                #submit .rz-disabled .rz-bar , 
+                #submit.rz-disabled .rz-pointer:after , 
+                #submit .rz-disabled .rz-tick {
+                    background-color:lightgrey;
+                }
+                #submit .rz-pointer :disabled{
+                    background-color:slategrey;
+                }
 
             
 
 
 #restaurantPopUp{
     width:100%;
-    max-height:100vh;
     position:absolute;
     top:200%;
     transform: translateY(-100%);
@@ -224,14 +334,15 @@ html, body{
     padding:3em 2em 2em 2em;
     z-index:11;
     transition: 0.5s ease-out;
+    max-height:70vh;
 }
     #restaurantPopUp #circle{
         height:4.2em;
         width:4.2em;
         position:relative;
         text-align:center;
-        top:0.4em;
-        left:0.4em;
+        top:0.5em;
+        left:0.5em;
         font-size:1em;
         padding-top:1.5em;
         overflow:hidden;
@@ -245,19 +356,31 @@ html, body{
         }
    
     #restaurantPopUp #circlePercent{
-        height:5em;
-        width:5em;
+        height:5.2em;
+        width:5.2em;
         position:absolute;
         top:0%;
         line-height:1;
         transform: translateY(-50%);
         right:1em;
         border-radius:100%;
-        background-color:#3A4D9E;
-        background-image:
-            linear-gradient(-90deg, transparent 50%, #6A7DCE 50%),
-            linear-gradient(90deg, #6A7DCE 50%, transparent 50%);    
+        background-color:#6A7DCE;
+        box-sizing:content-box;
+        /*background-image: linear-gradient( -90deg, transparent 50%, #6A7DCE 50%),  linear-gradient( 90deg, #6A7DCE 50%, transparent 50%);*/
         
+    }
+
+
+    #circlePercent h4{
+        width:100%;
+        padding:0;
+        margin:0;
+        position:absolute;
+        text-align:center;
+        z-index:20;
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight:bold;
     }
 
 
@@ -269,17 +392,53 @@ html, body{
     }
         #restaurantPopUp h3{
             padding-bottom:0.5em;
+            font-weight:bold;
         }
-            #restaurantInfo td:first-child{
+            #restaurantInfo td:first-child,
+            #restaurantEdit td:first-child,
+            #reviews td:first-child{
                 font-weight:bold;
-                padding-right:1em;
-                padding-bottom:0.5em;
+            }
+            #restaurantEdit td, #restaurantInfo td{
+                padding: 0.5em 1em;
+            }
+            #restaurantEdit tr:last-child{
+              
+            }
+            #mainEditSubmit{
+                float:right;
+            }
+            #restaurantInfo table,
+            #restaurantEdit table, #reviews table{
+                width:100%;
+            }
+            #restaurantInfo tr:nth-child(odd),
+            #restaurantEdit tr:nth-child(odd),
+            #reviews tr:nth-child(odd),
+            #submit tr:nth-child(odd),
+            #listItems md-card:nth-child(odd){
+                background-color:rgba(106,125,206,0.2);
+                
+            }
+            #reviews  .title{
+                /*background-color:#6A7DCE;*/
+                border-bottom: 2px solid #6A7DCE;
+                width:100%;
+                padding:0.2em 1em;
+                display:block;
+                margin-top:1em;
+            }
+            #reviews input{
+                width:100%;
+                border:none;
+                padding-left:1em;
             }
 
     #restaurantPopUp #btns{
         position:absolute;
         top:0px;
         right:7em;
+        cursor:pointer;
     }
         #restaurantPopUp #btns #infoBtn{
             background-color:#3A4D9E;
@@ -294,30 +453,90 @@ html, body{
             border-bottom-left-radius: 0.5em;
             border-bottom-right-radius: 0.5em;
         }
-    #restaurantPopUp #reviews{
-        max-height:40vh;
-        overflow-y:scroll;
+    #restaurantPopUp #restaurantEdit{
+        
         display:none;
+        overflow-x:hidden;
     }
-        #restaurantPopUp #reviews div{
-            border-radius:0.5em;
+    #restaurantEditForm{
+        overflow-y:scroll;
+        padding-right: 19px;
+        box-sizing: content-box;
+    }
+    #restaurantEdit input{
+        width:100%;
+        
+        border:none;
+        padding-left:1em;
+    }
+    
+    #restaurantPopUp #reviews{
+        display:none;
+        overflow-x:hidden;
+        overflow-y:auto;
+    }
+        #restaurantPopUp #reviews td{
+            padding-left: 1em;
+            padding-right:1em;
+            padding: 0.5em 1em;
+        }
+
+        #restaurantPopUp #reviews .currentReviews{
+            overflow-y:scroll;
+            padding-right: 19px;
+            box-sizing: content-box;
+            overflow-x:hidden;
+            max-height:30vh;
+            width:100%;
+         
+        }
+        #restaurantPopUp #reviews .currentReviews div{
+            
             width:100%;
             padding:0.5em 1em;
-            color:white;
+            
             /*#3a3a3a;*/
         }
-            #restaurantPopUp #reviews div:nth-child(odd){
-                background-color: rgba(58,77,158,1);
+            #restaurantPopUp #reviews .currentReviews div:nth-child(odd){
+                background-color: rgba(106,125,206,0.2);
             }
-            #restaurantPopUp #reviews div:nth-child(even){
+            /*
+            #restaurantPopUp #reviews .currentReviews  div:nth-child(even){
                 background-color: rgba(106,125,206,1);
             }
+*/
+            
 
 
 .btn-primary{
-    background-image: linear-gradient(to bottom,#6A7DCE 0,#3A4D9E 100%);
+    background-image:#6A7DCE ; /*linear-gradient(to bottom,#6A7DCE 0,#3A4D9E 100%);*/
     border-color:#3A4D9E;
     background-color:#6A7DCE ;
+}
+#restaurantEdit .btn-primary ,
+#reviews .btn-primary,
+#submit .btn-primary{
+    background-image:linear-gradient(to bottom,#3A4D9E 0,#3A4D9E 100%);
+    border-color:#3A4D9E;
+    background-color:#6A7DCE ;
+}
+#restaurantEdit .btn-primary.active,
+#reviews .btn-primary.active,
+#submit .btn-primary.active {
+    background-image:linear-gradient(to bottom,#6A7DCE  0,#6A7DCE  100%);
+    background-color:#6A7DCE ;
+}
+#restaurantEdit .btn-primary:focus,
+#reviews .btn-primary:focus,
+#submit .btn-primary:focus{
+    background-image:linear-gradient(to bottom,#6A7DCE  0,#6A7DCE  100%);
+    background-color:#6A7DCE ;
+}
+#restaurantEdit .btn-primary:hover,
+#reviews .btn-primary:hover,
+#submit .btn-primary:hover {
+    background-image:linear-gradient(to bottom,#6A7DCE 0,#3A4D9E 100%);
+    background-color:#3A4D9E ;
 }
 .btn-primary:focus{
     background-color:#3A4D9E;
@@ -405,5 +624,15 @@ html, body{
 #mainSubmit:disabled{
     background-color:grey;
     border-color:black;
+}
+
+.md-chips{
+    font-size:14px;
+    font-weight:normal;
+}
+
+#restaurantEdit md-chips-wrap{
+    margin:0;
+    padding-left:0;
 }
 

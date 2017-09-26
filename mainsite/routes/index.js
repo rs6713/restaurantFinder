@@ -35,6 +35,52 @@ router.delete(':/id',function(req,res,next){
   next();
 });
 
+
+
+
+
+//Method to submit a new restaurant
+router.post('/editRestaurant', function(req, res){
+  var data=req.body.data;
+
+    // Get a Mongo client to work with the Mongo server
+    var MongoClient = mongodb.MongoClient;
+  
+    // Define where the MongoDB server is
+    var url = 'mongodb://localhost:27017/mainsite';
+    if(data.hasOwnProperty('avgRating')) delete data.avgRating;
+    // Connect to the server
+    MongoClient.connect(url, function (err, db) {
+      if (err) {
+        console.log('Unable to connect to the Server', err);
+      } else {
+        // We are connected
+        console.log('Connection established to', url);
+    
+        // Get the documents collection
+        var collection = db.collection('restaurants');
+    
+        // Find all students
+        collection.update({"name": data.name},data, function (err, result) {
+          if (err) {
+            res.send(err);
+          } else if (result.length) {
+            //return result
+            res.send(result);
+          } else {
+            console.log("result.length", result.length);
+            res.send('No documents found');
+          }
+          //Close connection
+          db.close();
+        });
+      }
+  });
+
+});
+
+
+
 //Method to submit a new restaurant
 router.post('/submitRestaurant', function(req, res){
   var data=req.body.data;
@@ -103,12 +149,14 @@ router.get('/restaurantsAvail', function(req, res){
         var outdoor= JSON.parse(req.query.props).outdoor;
         var price= JSON.parse(req.query.props).price;
         var rating= JSON.parse(req.query.props).rating;
+        var occasions= JSON.parse(req.query.props).occasion;
 
         var queryComplete={};
         if(areas.length>0) queryComplete.area={ '$in':  areas};
         if(cuisines.length>0 ) queryComplete.cuisine=  { "$elemMatch": { "$in": cuisines } };
-        if(outdoor) queryComplete["outdoor seating"]= "yes";
-        
+        if(outdoor) queryComplete.outdoorSeating= { '$in': ["yes", "", "Yes"]};
+        if(occasions.length>0) queryComplete.occasion={'$in': occasions};
+
         var matchComplete={};
         var priceMatch={};
         console.log("The price length is", price.length);
@@ -136,7 +184,7 @@ router.get('/restaurantsAvail', function(req, res){
           [
             {$match:queryComplete},
             {$addFields:{price:{$ifNull:["$price", ""]}}},
-            {$addFields:{ avgRating: {$avg: "$ratings"}, priceL: {$strLenCP:"$price"}}},
+            {$addFields:{ avgRating: {$avg: "$rating"}, priceL: {$strLenCP:"$price"}}},
             matchComplete,
             priceMatch
           ]
@@ -153,6 +201,7 @@ router.get('/restaurantsAvail', function(req, res){
           } else if (result.length) {
             //return result
             console.log("Recieved result");
+            console.log(result[0]);
             res.json(result);
           } else {
             console.log("result.length", result.length);

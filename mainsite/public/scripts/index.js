@@ -22,12 +22,22 @@ var chosenRestaurant=defaultRest;
     var initMap=function() {
         var nbc = {lat:  51.51610, lng: -0.12728};
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
+          zoom: 15,
           center: nbc
         });
+        var image={
+            url: './../images/home.png',
+            //size: new google.maps.Size(71,71),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(0,0),
+            scaledSize: new google.maps.Size(30,30)
+        }
         var marker = new google.maps.Marker({
           position: nbc,
-          map: map
+          map: map,
+          icon: image,//'./../images/home.png',
+          title: 'NBC London Main Offices',
+          zIndex:1000
         });
         markerArray.push(marker);
       }
@@ -82,12 +92,27 @@ var chosenRestaurant=defaultRest;
         var h=$('#restaurantPopUp').outerHeight();
         $('#restaurantPopUp').css({"min-height":h});
         $("#restaurantInfo").css({"display":"block"});
+        $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"none"});
         $("#infoBtn").css({"background-color":"#3A4D9E"});
-        $("#reviewsBtn").css({"background-color":"#3a3a3a"});        
+        $("#reviewsBtn").css({"background-color":"#3a3a3a"});    
+        $("#editBtn").css({"background-color":"#3a3a3a"});      
     }
 
 $(document).ready(function(){ 
+
+    //var p=$('#innerfilters').outerWidth() - $('#innerfilters').innerWidth() + "px";
+    //var w=$('#innerfilters').outerWidth() +19;
+   
+   // $('#innerfilters').css({"width" : w+"px"});
+
+    //Stop pressing enter, prematurely submitting form
+    $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+        }
+    });
 
     //Click off restaurant pop up, stop propagation
     $("#views, #filters").click( function () {
@@ -100,19 +125,35 @@ $(document).ready(function(){
     $("#infoBtn").click(function(){
         $("#restaurantInfo").css({"display":"block"});
         $("#reviews").css({"display":"none"});
+        $("#restaurantEdit").css({"display":"none"});
         $("#infoBtn").css({"background-color":"#3A4D9E"});
         $("#reviewsBtn").css({"background-color":"#3a3a3a"});
+        $("#editBtn").css({"background-color":"#3a3a3a"});
     });
     $("#reviewsBtn").click(function(){
         $("#restaurantInfo").css({"display":"none"});
+        $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"block"});
         $("#infoBtn").css({"background-color":"#3a3a3a"});
         $("#reviewsBtn").css({"background-color":"#3A4D9E"});
+        $("#editBtn").css({"background-color":"#3a3a3a"});
+         w=$('.currentReviews').outerWidth() +19;
+        $('.currentReviews').css({"width" : w+"px"});
+    });
+    $("#editBtn").click(function(){
+        $("#restaurantInfo").css({"display":"none"});
+        $("#restaurantEdit").css({"display":"block"});
+        $("#reviews").css({"display":"none"});
+        $("#infoBtn").css({"background-color":"#3a3a3a"});
+        $("#reviewsBtn").css({"background-color":"#3a3a3a"});
+        $("#editBtn").css({"background-color":"#3A4D9E"});
+        $('#restaurantEditForm').css({"width":"100%"});
+        w=$('#restaurantEditForm').outerWidth()+19;
+        $('#restaurantEditForm').css({'width':w+'px'});
     });
 
 
-
-    $("input:checkbox").click(function() {
+    $("#filters input:checkbox").click(function() {
         $(this).parent().toggleClass("checked");
     });
     $( ".filter" ).each(function() {
@@ -127,29 +168,43 @@ $(document).ready(function(){
     //Handle main clicking menu choices
     $('#map-view').click(function(){
         $("#map").css({"display":"block"});
+        $("#list").css({"display":"none"});
         $("#submit").css({"display":"none"});
         $('#map-view').css({"color":"#212121", "background-color":"white" });
+        $('#list-view').css({"color":"white", "background-color":"#212121" });
         $('#add-view').css({"color":"white", "background-color":"#212121" });
-    })
+    });
     $('#add-view').click(function(){
         $("#map").css({"display":"none"});
+        $("#list").css({"display":"none"});
         $("#submit").css({"display":"block"});
         $('#add-view').css({"color":"#212121", "background-color":"white" });
+        $('#list-view').css({"color":"white", "background-color":"#212121" });
         $('#map-view').css({"color":"white", "background-color":"#212121" });
         $(window).resize();
+    });
+    $('#list-view').click(function(){
+        $("#map").css({"display":"none"});
+        $("#submit").css({"display":"none"});
+        $("#list").css({"display":"flex"});
+        $('#map-view').css({"color":"white", "background-color":"#212121" });
+        $('#add-view').css({"color":"white", "background-color":"#212121" });
+        $('#list-view').css({"color":"#212121", "background-color":"white" });
+        $(window).resize();
     })
+
     
     $('.page').mouseover(function(){
         
         if($(this)[0].style.backgroundColor!="rgb(255, 255, 255)"){
-            console.log("mouse over",$(this)[0].style.backgroundColor );
+            //console.log("mouse over",$(this)[0].style.backgroundColor );
             $(this).css({"background-color": "#121212"});
         }
     });
     $('.page').mouseout(function(){
         
         if($(this)[0].style.backgroundColor!="rgb(255, 255, 255)"){
-            console.log("mouse out",$(this)[0].style.backgroundColor );
+            //console.log("mouse out",$(this)[0].style.backgroundColor );
             $(this).css({"background-color": "#212121"});
         }
     });
