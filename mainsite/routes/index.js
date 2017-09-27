@@ -36,7 +36,45 @@ router.delete(':/id',function(req,res,next){
 });
 
 
+//Method to submit a new restaurant
+router.post('/deleteRestaurant', function(req, res){
+  var nameRest=req.body.data;
+    
+    // Get a Mongo client to work with the Mongo server
+    var MongoClient = mongodb.MongoClient;
+  
+    // Define where the MongoDB server is
+    var url = 'mongodb://localhost:27017/mainsite';
+    
+    // Connect to the server
+    MongoClient.connect(url, function (err, db) {
+      if (err) {
+        console.log('Unable to connect to the Server', err);
+      } else {
+        // We are connected
+        console.log('Connection established to', url);
+    
+        // Get the documents collection
+        var collection = db.collection('restaurants');
+        console.log("Name rest rtying to delete is", nameRest);
+        // Find all students
+        collection.remove({ name : nameRest}, function (err, result) {
+          if (err) {
+            res.send(err);
+          } else if (result.length) {
+            //return result
+            res.send(result);
+          } else {
+            console.log("result.length", result.length);
+            res.send('No restaurant found to be deleted');
+          }
+          //Close connection
+          db.close();
+        });
+      }
+  });
 
+});
 
 
 //Method to submit a new restaurant

@@ -57,6 +57,16 @@ mainApp.factory('editRest', ['$http',  function($http){
     return editRes;
 }]);
 
+//Factory function used to edit restaurant data on database
+mainApp.factory('deleteRest', ['$http',  function($http){
+    var deleteRes={};
+    deleteRes.deleteData=function(rest){
+        return $http.post('/deleteRestaurant',{data:rest});
+             
+    }
+    return deleteRes;
+}]);
+
 //Factory function used to submit new restaurant reviews to database
 mainApp.factory('reviewRest', ['$http',  function($http){
     var reviewRes={};
@@ -147,7 +157,7 @@ mainApp.directive('labelStyle', function($interpolate){
     };
 });
 
-mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOptions', 'restaurantsAvail', 'googleURL','submitRest', 'occasionOptions', 'editRest',function($scope, $timeout, areaOptions, catOptions, restaurantsAvail, googleURL, submitRest, occasionOptions, editRest){
+mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOptions', 'restaurantsAvail', 'googleURL','submitRest', 'occasionOptions', 'editRest', 'deleteRest',function($scope, $timeout, areaOptions, catOptions, restaurantsAvail, googleURL, submitRest, occasionOptions, editRest, deleteRest){
     var self=this;
     self.readonly=true;
     self.removeable=true;
@@ -157,9 +167,11 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.occasionOptions=[];
     
     $scope.restaurantList=[];
+    $scope.reduceRestaurantList=[];
+    $scope.searchListText="";
 
     $scope.listOrder="name";
-    $scope.listOrderOptions=[{name: "Name",code:"name"},{name:"Price: lowest to highest", code:"price"}, {name:"Rating: highest to lowest", code:"avgRating"}]
+    $scope.listOrderOptions=[{name: "Name",code:"name"},{name:"Price- lowest to highest", code:"price"}, {name:"Rating- highest to lowest", code:"avgRating"}];
 
     $scope.chosenRestaurant={
         address: "Unknown",
@@ -172,6 +184,10 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         avgRating: 0,
         rating:[]
     };
+
+    $scope.setOrder=function(name){
+        $scope.listOrder=name;
+    }
 
     $scope.newRestaurant={
         address:"",
@@ -210,6 +226,9 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 }
     };
     $scope.newReview="";
+
+
+
 
     var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating"];
     $scope.priceOptions= ["£", "££", "£££"];
@@ -281,6 +300,34 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         console.log($scope.chosenRestaurant);
         $scope.$apply() ;
     };
+
+    //remove from databse, associative array used for markers, marker, restaurantList
+    $scope.removeItem=function(name){
+        delete restaurants[name];
+        $scope.restaurantList = $scope.restaurantList.filter(function( obj ) {
+            return obj.name !== name;
+        });
+        for(var i=0; i< markerArray.length; i++){
+            if(markerArray[i].title==name){
+                markerArray[i].setMap(null);
+                markerArray.splice(i,1);
+                break;
+            }
+        }
+
+        deleteRest.deleteData(name).success(function(data){
+            $scope.deleteResult="Restaurant successfully removed"; 
+        }).error(function(error,status){
+            console.log(error);    
+            $scope.reviewSubmitResult="Restaurant not removed."
+        });        
+        
+
+    }
+    $scope.changeChosenRestaurant=function(name){
+        $scope.chosenRestaurant=restaurants[name];
+        $scope.editRestaurant=$scope.chosenRestaurant;
+    }
 //|| $scope.restaurantSubmissionForm.price.$error.required || $scope.restaurantSubmissionForm.outdoor.$error.required
 
    
@@ -401,9 +448,19 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             }
     }
 
+
+    $scope.reduceRestaurantList=function(){
+        console.log("search text is", $scope.searchListText)
+        if($scope.searchListText=="") $scope.restaurantListReduce=JSON.parse(JSON.stringify($scope.restaurantList));
+        else $scope.restaurantListReduce=$scope.querySearch($scope.searchListText, "list");
+
+    }
+    
+
     /**
      * Search for contacts; use a random delay to simulate a remote call
      */
+
     $scope.querySearch=function(criteria, type) {
         console.log(criteria);
         console.log("CatOptions are:" , $scope.catOptions);
@@ -422,6 +479,10 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 categories= $scope.areaOptions.filter(createFilterFor(criteria));
                 console.log("Matching area types are: ", categories);
                 break;
+            case 'list':
+                categories= $scope.restaurantList.filter(createFilterFor(criteria));
+                console.log("Matching list types are: ", categories);
+                return categories;
         }
         var reducedCriteria=categories.map(function(a){return a.name});
         console.log("Reduced", reducedCriteria);
@@ -517,7 +578,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     //Wait for filter changes, then change map display
     $scope.$watch('[catOptions, areaOptions, outdoor, prices_bar.value, ratings_bar.value, occasionOptions]', function(newValues, oldValues, $scope) {
         console.log("values changing");
-        if(initializing==true){
+        if(newValues[1]==undefined || newValues[5]==undefined || newValues[0]==undefined){
             console.log("Currently initializingm filter values are currently:", newValues);
             $timeout(function(){
                 console.log("Initializing complete after 0.5 sec (guessed)");
@@ -564,6 +625,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 if(data!= "No documents found"){
                     console.log("Data was successfully retrieved:", data);
                     $scope.restaurantList=data;
+                    $scope.restaurantListReduce=JSON.parse(JSON.stringify($scope.restaurantList));
                     addMarkers(data);
                 }else{
                     console.log(data);

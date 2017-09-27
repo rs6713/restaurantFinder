@@ -49,11 +49,11 @@ html(ng-app="eaHelper")
 
   body
     //Menu Top Bar
-    div.container-fluid
+    //div.container-fluid
       div.row.justify-content-between
     
     //Filters and Map(Main activity)
-    div.container-fluid(ng-controller="mainController")
+    div.container-fluid(ng-controller="mainController")#toptop
       div.row
         //Filters
         div.col.col-sm-3.col-md-3.col-lg-3#filters
@@ -118,24 +118,52 @@ html(ng-app="eaHelper")
           div.page#list-view
             i.fa.fa-th-list(aria-hidden="true")
             br 
-            |List
+            |List Search
           div.page#add-view
             i.fa.fa-plus-circle(aria-hidden="true")
             br 
             |Add Location
       
-        md-content.col.col-sm-8.col-md-8.col-lg-8#mapContainer
-          md-content#list
-            h3 
-              b Search for Restaurant
+        div.col.col-sm-8.col-md-8.col-lg-8#mapContainer
+          div#list
             div#listControls
-              md-input-container.md-block(flex-gt-sm)
-                label Order By
-                md-select(ng-model="listOrder")
-                  md-option(ng-repeat="ord in listOrderOptions", value="{{ord.code}}")
-                    {{ord.name}}
-            md-content#listItems
-              md-card(md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}", md-theme-watch, ng-repeat="item in restaurantList | orderBy :  listOrder track by $index ")
+              //form(name="listControls")
+
+
+              
+              md-content()
+                div(layout-gt-sm="row") 
+                  md-input-container(class="md-block", flex-gt-sm)
+                    label Order By
+                    md-select( ng-model="listOrder")
+                      md-option(ng-repeat="ord in listOrderOptions", ng-value="ord.code")
+                        {{ ord.name}}
+
+                  md-input-container(flex-gt-sm, class="md-block md-input-has-placeholder")
+                    label Search for specific retaurant
+                    input(ng-model="searchListText", ng-change="reduceRestaurantList()")              
+         
+              //div.dropdown-toggle(type="button", data-toggle="dropdown")   
+                span Order
+                i.fa.fa-chevron-down(aria-hidden="true")
+              //div.dropdown
+                div(ng-repeat="ord in listOrderOptions", ng-click="setOrder(ord.name)") {{ord.name}}
+
+
+            div#listItems
+
+              //div( ng-repeat="item in restaurantListReduce | orderBy :  listOrder track by $index "))
+                div#titleList
+                  h3 {{item.name}}
+                  div
+                  span {{item.address}}
+                div
+                  md-card-actions(layout="row", layout-align="end center")
+                    md-button(ng-click="removeItem(item.name)") Delete
+                    md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('edit')") Edit
+                    md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('review')") Review
+                    
+              md-card(md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}", md-theme-watch, ng-repeat="item in restaurantListReduce | orderBy :  listOrder track by $index ")
                 md-card-title
                 md-card-title-text
                   span.md-headline {{item.name}}  
@@ -146,9 +174,9 @@ html(ng-app="eaHelper")
                   div.md-media-sm.card-media
 
                 md-card-actions(layout="row", layout-align="end center")
-                  md-button Delete
-                  md-button Edit
-                  md-button Review
+                  md-button(ng-click="removeItem(item.name)") Delete
+                  md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('edit')") Edit
+                  md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('review')") Review
 
 
 

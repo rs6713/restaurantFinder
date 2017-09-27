@@ -89,22 +89,63 @@ var chosenRestaurant=defaultRest;
         //Configure display of restaurant INFO
         //Setup min height according to info
         $('#restaurantPopUp').css({"min-height":0});
-        var h=$('#restaurantPopUp').outerHeight();
-        $('#restaurantPopUp').css({"min-height":h});
+
         $("#restaurantInfo").css({"display":"block"});
         $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"none"});
+
+        var h=$('#restaurantPopUp').outerHeight();
+        $('#restaurantPopUp').css({"min-height":h});
+
         $("#infoBtn").css({"background-color":"#3A4D9E"});
         $("#reviewsBtn").css({"background-color":"#3a3a3a"});    
         $("#editBtn").css({"background-color":"#3a3a3a"});      
     }
 
+    var popRestList=function(popType){
+        $("#infoBtn").css({"background-color":"#3a3a3a"});
+        $("#reviewsBtn").css({"background-color":"#3a3a3a"});    
+        $("#editBtn").css({"background-color":"#3a3a3a"});  
+        $("#restaurantInfo").css({"display":"none"});
+        $("#restaurantEdit").css({"display":"none"});
+        $("#reviews").css({"display":"none"}); 
+        $('#restaurantPopUp').css({"min-height":0});
+        switch(popType){
+            case "info":
+                $("#infoBtn").css({"background-color":"#3A4D9E"});
+                $("#restaurantInfo").css({"display":"block"});
+                break;
+            case "edit":
+                $("#editBtn").css({"background-color":"#3A4D9E"});
+                $("#restaurantEdit").css({"display":"block"});
+                break;
+            case "review":
+                $("#reviewsBtn").css({"background-color":"#3A4D9E"});
+                $("#reviews").css({"display":"block"});
+                break;
+        }
+        var h=$('#restaurantPopUp').outerHeight();
+        $('#restaurantPopUp').css({"min-height":h});
+        $("#restaurantPopUp").css({top:"100%"});
+    }
+$(window).resize(function(){
+    $('#innerfilters').css({"width" : "100%"});
+    var w=$('#innerfilters').outerWidth() +19;
+    $('#innerfilters').css({"width" : w+"px"});    
+
+    $('#listItems').css({"width" : "100%"});
+    var w=$('#listItems').outerWidth() +19;
+    $('#listItems').css({"width" : w+"px"});   
+});
+
 $(document).ready(function(){ 
 
     //var p=$('#innerfilters').outerWidth() - $('#innerfilters').innerWidth() + "px";
-    //var w=$('#innerfilters').outerWidth() +19;
-   
-   // $('#innerfilters').css({"width" : w+"px"});
+    var w=$('#innerfilters').outerWidth() +19;
+    $('#innerfilters').css({"width" : w+"px"});
+
+    var w=$('#listItems').outerWidth() +19;
+    $('#listItems').css({"width" : w+"px"}); 
 
     //Stop pressing enter, prematurely submitting form
     $(window).keydown(function(event){
@@ -118,6 +159,8 @@ $(document).ready(function(){
     $("#views, #filters").click( function () {
         $("#restaurantPopUp").css({top:"200%"});
     }); 
+
+
 
     
     //Handle click events associated with pop up Restaurant Info
@@ -191,7 +234,7 @@ $(document).ready(function(){
         $('#add-view').css({"color":"white", "background-color":"#212121" });
         $('#list-view').css({"color":"#212121", "background-color":"white" });
         $(window).resize();
-    })
+    });
 
     
     $('.page').mouseover(function(){
