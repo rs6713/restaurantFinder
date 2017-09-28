@@ -134,13 +134,29 @@ mainApp.directive('backImg', function(){
                     //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
                 });
             }
-            /*
-            else{
+        });
+    };
+});
+
+mainApp.directive('backImglist', function(){
+    return function(scope, element, attrs){
+        attrs.$observe('backImglist', function(value) {
+            value=value/5*360;
+            if(value<=180){
+                value=value-90;
                 element.css({
-                    'background-image': 'linear-gradient(-90deg, transparent 50%, #6A7DCE 50%),linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
-                });                
+                    'background-image': 'linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
+                });
+            }else{
+                console.log("value is", value);
+                value=value-270;
+                console.log("value is", value);
+                element.css({
+                    'background-image': 'linear-gradient('+value+'deg, #3A4D9E 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
+                });
             }
-            */
         });
     };
 });
@@ -157,7 +173,7 @@ mainApp.directive('labelStyle', function($interpolate){
     };
 });
 
-mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOptions', 'restaurantsAvail', 'googleURL','submitRest', 'occasionOptions', 'editRest', 'deleteRest',function($scope, $timeout, areaOptions, catOptions, restaurantsAvail, googleURL, submitRest, occasionOptions, editRest, deleteRest){
+mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOptions', 'restaurantsAvail', 'googleURL','submitRest', 'occasionOptions', 'editRest', 'deleteRest', '$mdToast',function($scope, $timeout, areaOptions, catOptions, restaurantsAvail, googleURL, submitRest, occasionOptions, editRest, deleteRest, $mdToast){
     var self=this;
     self.readonly=true;
     self.removeable=true;
@@ -171,7 +187,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.searchListText="";
 
     $scope.listOrder="name";
-    $scope.listOrderOptions=[{name: "Name",code:"name"},{name:"Price- lowest to highest", code:"price"}, {name:"Rating- highest to lowest", code:"avgRating"}];
+    $scope.listOrderOptions=[{name: "Name",code:"name", reverse: false},{name:"Price- lowest to highest", code:"price", reverse: false}, {name:"Rating- lowest to highest", code:"avgRating", reverse: false}, {name:"Rating- highest to lowest", code:"avgRating", reverse: true}];
 
     $scope.chosenRestaurant={
         address: "Unknown",
@@ -635,6 +651,53 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             })
         }
     },true);
+
+    //Handles toast delete button
+    var last = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+
+    $scope.toastPosition = angular.extend({},last);
+
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+
+        last = angular.extend({},current);
+    }
+
+    $scope.showActionToast = function(name) {
+        var pinTo = $scope.getToastPosition();
+        var toast = $mdToast.simple()
+            .textContent('Are you sure you want to delete', name,'?')
+            .action('DELETE')
+            .highlightAction(true)
+            .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+            .position(pinTo);
+
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                $scope.removeItem(item.name);
+            }
+        });
+    };
+
+
 }]);
 
 

@@ -136,7 +136,7 @@ html(ng-app="eaHelper")
                   md-input-container(class="md-block", flex-gt-sm)
                     label Order By
                     md-select( ng-model="listOrder")
-                      md-option(ng-repeat="ord in listOrderOptions", ng-value="ord.code")
+                      md-option(ng-repeat="ord in listOrderOptions", ng-value="ord")
                         {{ ord.name}}
 
                   md-input-container(flex-gt-sm, class="md-block md-input-has-placeholder")
@@ -152,18 +152,35 @@ html(ng-app="eaHelper")
 
             div#listItems
 
-              //div( ng-repeat="item in restaurantListReduce | orderBy :  listOrder track by $index "))
+              div#listItem( ng-repeat="item in restaurantListReduce | orderBy :  listOrder.code : listOrder.reverse track by $index ")
+                
                 div#titleList
-                  h3 {{item.name}}
-                  div
-                  span {{item.address}}
-                div
-                  md-card-actions(layout="row", layout-align="end center")
-                    md-button(ng-click="removeItem(item.name)") Delete
-                    md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('edit')") Edit
-                    md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('review')") Review
-                    
-              md-card(md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}", md-theme-watch, ng-repeat="item in restaurantListReduce | orderBy :  listOrder track by $index ")
+                  h1 {{item.name}}
+                  md-divider
+                  span 
+                    b {{item.address}}
+                
+                div#props
+                  div#circlePercent(back-imglist="{{item.avgRating}}")
+                    h4(ng-if="item.avgRating=='-'") {{item.avgRating}}
+                    h4(ng-if="item.avgRating!='-'") {{item.avgRating  | number:1}}
+                    div#circle
+                  div#cuisines
+                    span(ng-repeat="c in item.cuisine") 
+                      {{c}}
+                  div#priceList
+                    {{item.price}}
+                  div#occs
+                    span(ng-repeat="occ in item.occasion") 
+                      {{occ}}  
+                     
+                div#listButtons
+                  md-button(ng-click="showActionToast(item.name)") Delete 
+                  //ng-click="removeItem(item.name)"
+                  md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('edit')") Edit
+                  md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('review')") Review
+                      
+              //md-card(md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}", md-theme-watch, ng-repeat="item in restaurantListReduce | orderBy :  listOrder track by $index ")
                 md-card-title
                 md-card-title-text
                   span.md-headline {{item.name}}  
@@ -327,7 +344,7 @@ html(ng-app="eaHelper")
               span#infoBtn Info
               span#reviewsBtn Reviews
               span#editBtn(ng-click="editRestaurantFill()") Edit
-            h3 {{chosenRestaurant.name}}
+            h1 {{chosenRestaurant.name}}
             //Information about chosen restaurant
             div#restaurantInfo
               table
@@ -454,7 +471,7 @@ html(ng-app="eaHelper")
                           | {{reviewSubmitResult}}       
             //circlePercent class creates half cover 
             //circlePercent id can either cover that, or the other half.            
-            div#circlePercent.circlePercent(back-img="{{avgRatingPercent}}")
+            div#circlePercent(back-img="{{avgRatingPercent}}")
               //( style="{{avgRatingPercent2}}")
               h4(ng-if="chosenRestaurant.avgRating=='-'") {{chosenRestaurant.avgRating}}
               h4(ng-if="chosenRestaurant.avgRating!='-'") {{chosenRestaurant.avgRating  | number:1}}

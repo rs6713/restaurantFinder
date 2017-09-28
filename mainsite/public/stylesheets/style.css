@@ -14,6 +14,7 @@ html, body{
     font-size:14px;
     color:white;
     overflow:hidden;
+    background-color:#DDDDDD;    
 }
 #toptop{
     top:0;
@@ -165,13 +166,17 @@ a, a:hover, a:active {
 
 #list{
     width:100%;
-    height:100%;
+    max-height:100%;
     overflow-x:hidden;
     overflow-y:hidden;
     display:none;
     color:#212121;
     flex-direction:column;
+    
+    
+   /* background-color: rgba(115, 130,200, 0.5);*/
 }
+
     
     #list md-input-container{
         display: inline-block;
@@ -185,7 +190,7 @@ a, a:hover, a:active {
     #listControls{
         width:100%;
         flex: 0 1 auto;
-        
+        border-bottom: 1px solid #AAAAAA;
         
     }
     #list md-card{
@@ -198,6 +203,7 @@ a, a:hover, a:active {
         }
         #listControls md-input-container label{
             color:#212121;
+            font-size:14px;
         }
 
     #listItems{
@@ -206,7 +212,88 @@ a, a:hover, a:active {
         overflow-y:scroll;
         /*padding-right:10em;
         box-sizing:content-box;*/
+        padding: 2em 1em;
+        box-sizing:border-box;
+        display:flex;
+        flex-direction:row;
+        flex-wrap: wrap;
     }
+        #listItems #listItem:nth-child(odd){
+            margin-right:1%;
+        }
+        #listItems #listItem:nth-child(even){
+            margin-left:1%;
+        }
+
+        #listItems #listItem{
+           
+            width:49%;
+            background-color:white;
+            margin: 0 0 1em 0 ;
+            
+            flex-wrap: wrap;
+            overflow:hidden;
+            height:auto;
+            position:relative;
+            box-shadow: 0 0 15px 1px rgba(0,0,0,0.4);
+        }
+        #listItems .md-button{
+            font-weight:bold;
+        }
+        #listItems #titleList{
+            width:60%;
+            display:inline-block;
+            padding: 3em 1em 3.5em 1em;
+            z-index:2;
+            position:relative;
+            color:white;
+            box-sizing:border-box;
+        }
+        #listItems #listButtons{
+            margin:0;
+            padding:0;
+            position:absolute;
+            right:0;
+            bottom:0;
+            z-index:10;
+        }
+        #listItems #props{
+            position:absolute;
+            right:0;
+            top:0;
+            width:40%;
+            display:inline-block;
+            color: grey;
+            font-weight:bold;
+            text-align:right;
+            padding-right:1em;
+            padding-top:1em;
+            padding-left:1em;
+            padding-bottom:1em;
+        }
+
+            #listItems #titleList span{
+                padding-top:1em;
+                display:block;
+            }
+        #listItems h1{
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        #listItems #listItem:before{ 
+            background-color:#6A7DCE;
+            transform: skewX(20deg);
+            position:absolute;
+            left:-20%;
+            top:0;
+            width:80%;
+            height:100%;
+            background-position: center; 
+            background-size:cover;
+            content:'';
+            -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
+            backface-visibility: hidden;
+           
+        }
 
 
 #mapContainer{
@@ -221,7 +308,7 @@ a, a:hover, a:active {
         height:100%;
     }
     #mapContainer #submit{
-        display:none;
+        display:block;
         width:100%;
         height:100%;
         padding-right:5em;
@@ -229,12 +316,15 @@ a, a:hover, a:active {
         color:#212121;
         overflow-y:scroll;
         overflow-x:hidden;
+        
     }
         #mapContainer #submitContainer{
+            display:none;
             width:100%;
             height:100%;
             padding:2em;
             overflow-x:hidden;
+            background-color:white;
         }
         #mapContainer #submit table{
             width:100%;
@@ -348,9 +438,10 @@ a, a:hover, a:active {
     background-color:white;
     color: #3a3a3a;
     padding:3em 2em 2em 2em;
-    z-index:11;
+    z-index:50;
     transition: 0.5s ease-out;
     max-height:70vh;
+    border-top:5px solid #3A4D9E;
 }
     #restaurantPopUp #circle{
         height:4.2em;
@@ -383,7 +474,48 @@ a, a:hover, a:active {
         background-color:#6A7DCE;
         box-sizing:content-box;
         /*background-image: linear-gradient( -90deg, transparent 50%, #6A7DCE 50%),  linear-gradient( 90deg, #6A7DCE 50%, transparent 50%);*/
-        
+    }
+
+    #listItems #props #circlePercent{
+        height:5.2em;
+        width:5.2em;
+        line-height:1;
+        display:inline-block;
+        border-radius:100%;
+        background-color:#6A7DCE;
+        box-sizing:content-box;
+        position:relative;
+        margin-bottom:1em;
+        /*background-image: linear-gradient( -90deg, transparent 50%, #6A7DCE 50%),  linear-gradient( 90deg, #6A7DCE 50%, transparent 50%);*/
+    }
+    #listItems #props #cuisines{
+        margin-bottom:1em;
+        font-weight:bold;
+        font-size:1.2em;
+        color:#212121;
+    }
+    #listItems #props #priceList{
+        color:#212121;
+        font-size:0.8em;
+        font-weight:bold;
+    }
+    #listItems #props #occs{
+        font-size:0.8em;
+        color:#AAAAAA;
+    }
+    #listItems #props #circle{
+        height:4.2em;
+        width:4.2em;
+        position:relative;
+        text-align:center;
+        top:0.5em;
+        left:0.5em;
+        font-size:1em;
+        padding-top:1.5em;
+        overflow:hidden;
+        font-weight:bold;
+        border-radius:100%;
+        background-color: white;
     }
 
 
@@ -406,9 +538,10 @@ a, a:hover, a:active {
     #restaurantInfo {
         font-size:1em;
     }
-        #restaurantPopUp h3{
+        #restaurantPopUp h1{
             padding-bottom:0.5em;
-            font-weight:bold;
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
         }
             #restaurantInfo td:first-child,
             #restaurantEdit td:first-child,
@@ -436,6 +569,7 @@ a, a:hover, a:active {
                 background-color:rgba(106,125,206,0.2);
                 
             }
+            
             #reviews  .title{
                 /*background-color:#6A7DCE;*/
                 border-bottom: 2px solid #6A7DCE;
@@ -470,13 +604,14 @@ a, a:hover, a:active {
             border-bottom-right-radius: 0.5em;
         }
     #restaurantPopUp #restaurantEdit{
-        
+        width:100%;
+
         display:none;
         overflow-x:hidden;
     }
     #restaurantEditForm{
+        width:100%;
         overflow-y:scroll;
-        padding-right: 19px;
         box-sizing: content-box;
     }
     #restaurantEdit input{

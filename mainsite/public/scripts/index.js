@@ -135,7 +135,11 @@ $(window).resize(function(){
 
     $('#listItems').css({"width" : "100%"});
     var w=$('#listItems').outerWidth() +19;
-    $('#listItems').css({"width" : w+"px"});   
+    $('#listItems').css({"width" : w+"px"});  
+
+    $('#restaurantEditForm').css({"width" : "100%"});
+    var w=$('#restaurantEditForm').outerWidth() +19;
+    $('#restaurantEditForm').css({"width" : w+"px"});  
 });
 
 $(document).ready(function(){ 
@@ -146,6 +150,9 @@ $(document).ready(function(){
 
     var w=$('#listItems').outerWidth() +19;
     $('#listItems').css({"width" : w+"px"}); 
+
+    var w=$('#restaurantEditForm').outerWidth() +19;
+    $('#restaurantEditForm').css({"width" : w+"px"}); 
 
     //Stop pressing enter, prematurely submitting form
     $(window).keydown(function(event){
@@ -212,7 +219,7 @@ $(document).ready(function(){
     $('#map-view').click(function(){
         $("#map").css({"display":"block"});
         $("#list").css({"display":"none"});
-        $("#submit").css({"display":"none"});
+        $("#submitContainer").css({"display":"none"});
         $('#map-view').css({"color":"#212121", "background-color":"white" });
         $('#list-view').css({"color":"white", "background-color":"#212121" });
         $('#add-view').css({"color":"white", "background-color":"#212121" });
@@ -220,7 +227,7 @@ $(document).ready(function(){
     $('#add-view').click(function(){
         $("#map").css({"display":"none"});
         $("#list").css({"display":"none"});
-        $("#submit").css({"display":"block"});
+        $("#submitContainer").css({"display":"block"});
         $('#add-view').css({"color":"#212121", "background-color":"white" });
         $('#list-view').css({"color":"white", "background-color":"#212121" });
         $('#map-view').css({"color":"white", "background-color":"#212121" });
@@ -228,7 +235,7 @@ $(document).ready(function(){
     });
     $('#list-view').click(function(){
         $("#map").css({"display":"none"});
-        $("#submit").css({"display":"none"});
+        $("#submitContainer").css({"display":"none"});
         $("#list").css({"display":"flex"});
         $('#map-view').css({"color":"white", "background-color":"#212121" });
         $('#add-view').css({"color":"white", "background-color":"#212121" });
