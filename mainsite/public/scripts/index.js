@@ -23,7 +23,8 @@ var chosenRestaurant=defaultRest;
         var nbc = {lat:  51.51610, lng: -0.12728};
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
-          center: nbc
+          center: nbc,
+          scrollwheel: false
         });
         var image={
             url: './../images/home.png',
@@ -130,28 +131,31 @@ var chosenRestaurant=defaultRest;
     }
 $(window).resize(function(){
     $('#innerfilters').css({"width" : "100%"});
-    var w=$('#innerfilters').outerWidth() +19;
-    $('#innerfilters').css({"width" : w+"px"});    
-
+    if($(window).width()>768){
+        
+        var w=$('#innerfilters').outerWidth() +19;
+        $('#innerfilters').css({"width" : w+"px"});    
+    }
     $('#listItems').css({"width" : "100%"});
     var w=$('#listItems').outerWidth() +19;
     $('#listItems').css({"width" : w+"px"});  
 
     $('#restaurantEditForm').css({"width" : "100%"});
-    var w=$('#restaurantEditForm').outerWidth() +19;
+    var w=$('#restaurantEdit').outerWidth() +19;
     $('#restaurantEditForm').css({"width" : w+"px"});  
 });
 
 $(document).ready(function(){ 
 
     //var p=$('#innerfilters').outerWidth() - $('#innerfilters').innerWidth() + "px";
-    var w=$('#innerfilters').outerWidth() +19;
-    $('#innerfilters').css({"width" : w+"px"});
-
+    if($(window).width()>768){
+        var w=$('#innerfilters').outerWidth() +19;
+        $('#innerfilters').css({"width" : w+"px"});
+    }
     var w=$('#listItems').outerWidth() +19;
     $('#listItems').css({"width" : w+"px"}); 
 
-    var w=$('#restaurantEditForm').outerWidth() +19;
+    var w=$('#restaurantPopUp  #restaurantEdit').outerWidth() +19;
     $('#restaurantEditForm').css({"width" : w+"px"}); 
 
     //Stop pressing enter, prematurely submitting form

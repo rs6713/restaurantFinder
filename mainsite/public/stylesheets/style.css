@@ -3,22 +3,103 @@ $baseColor: #F06D06;
 
 map marker colours EE6237
 */
+
+
 html, body{
     width:100%;
     top:0;
     position:initial;
-    max-height:100vh; 
+    
     height:100vh;
     max-width:100%;
     font-family:Arial, Helvetica, sans-serif;
     font-size:14px;
     color:white;
-    overflow:hidden;
+    
     background-color:#DDDDDD;    
 }
+/*small screen*/
+@media(min-width:967px){
+        #listItems #listItem:nth-child(odd){
+            margin-right:1%;
+        }
+        #listItems #listItem:nth-child(even){
+            margin-left:1%;
+        }
+
+        #listItems #listItem{
+           
+            width:49%;
+        }
+}
+@media(max-width:966px){
+        #listItems #listItem{
+           
+            width:100%;
+        }
+}
+@media(min-width:768px){
+    body{
+        max-height:100vh;
+        overflow:hidden;
+    }
+    #views .page{
+        width:100%;
+    }
+    #filters{
+        padding:20vh 0 0 0;
+        height:100vh;
+        overflow:hidden;
+        
+    }
+    #innerfilters{
+        width:100%;
+        height:100%;
+        overflow-y:scroll;
+        overflow-x:hidden;
+        /*padding-right: 19px;
+        box-sizing: content-box;*/
+        
+    }
+    #listItems #titleList{
+            padding: 3em 1em 1em 1em;
+    }
+    #views{
+        height:100vh;
+        padding:10vh 0 0 0 ;
+    }
+    #toptop{
+        position:fixed;
+    }
+
+}
+@media(max-width:765px){
+    #listItems #titleList{
+            padding: 3em 1em 1em 1em;
+    }
+    #toptop{
+        position:absolute;
+    }
+    #views .page{
+        width:33.33%;
+        display:inline-block;
+    }
+    #filters{
+        padding:0 0 10vh 0;
+        
+    }
+    #views{
+        padding:0;
+        margin:0;
+    }
+
+
+}
+
+
 #toptop{
     top:0;
-    position:fixed;
+
     left:0;
     width:100%;
     height:100%;
@@ -29,19 +110,9 @@ a, a:hover, a:active {
 
 #filters{
     background-color:#3A4D9E;
-    height:100vh;
-    padding:20vh 0 0 0;
-    overflow:hidden;
+
 }
-    #innerfilters{
-        width:100%;
-        height:100%;
-        overflow-y:scroll;
-        overflow-x:hidden;
-        /*padding-right: 19px;
-        box-sizing: content-box;*/
-        
-    }
+
     .filter{
         padding: 2em 1em;
         width:100%;
@@ -144,8 +215,7 @@ a, a:hover, a:active {
 
 
 #views{
-    height:100vh;
-    padding:10vh 0 0 0 ;
+
     margin:0;
     background-color:#212121; 
     cursor:pointer;
@@ -154,7 +224,7 @@ a, a:hover, a:active {
     #views .page{
         padding: 2em 0;
         text-align:center;
-        width:100%;
+        
         margin:0;
         background-color:#212121;
     }
@@ -218,16 +288,12 @@ a, a:hover, a:active {
         flex-direction:row;
         flex-wrap: wrap;
     }
-        #listItems #listItem:nth-child(odd){
-            margin-right:1%;
-        }
-        #listItems #listItem:nth-child(even){
-            margin-left:1%;
-        }
+
 
         #listItems #listItem{
            
-            width:49%;
+            display: flex; 
+            
             background-color:white;
             margin: 0 0 1em 0 ;
             
@@ -241,9 +307,9 @@ a, a:hover, a:active {
             font-weight:bold;
         }
         #listItems #titleList{
+            
             width:60%;
             display:inline-block;
-            padding: 3em 1em 3.5em 1em;
             z-index:2;
             position:relative;
             color:white;
@@ -252,17 +318,21 @@ a, a:hover, a:active {
         #listItems #listButtons{
             margin:0;
             padding:0;
-            position:absolute;
-            right:0;
-            bottom:0;
+            float:right;
             z-index:10;
+            width:100%;
+            vertical-align: bottom;
+            align-self:flex-end;
+            display:flex;
+            justify-content: flex-end;
+        }
+        #listItems #listButtons button{
+            
         }
         #listItems #props{
-            position:absolute;
-            right:0;
-            top:0;
+            float:right;
             width:40%;
-            display:inline-block;
+            
             color: grey;
             font-weight:bold;
             text-align:right;
@@ -440,8 +510,10 @@ a, a:hover, a:active {
     padding:3em 2em 2em 2em;
     z-index:50;
     transition: 0.5s ease-out;
-    max-height:70vh;
+    max-height:75vh;
     border-top:5px solid #3A4D9E;
+    display: flex;
+    flex-direction: column;
 }
     #restaurantPopUp #circle{
         height:4.2em;
@@ -608,11 +680,14 @@ a, a:hover, a:active {
 
         display:none;
         overflow-x:hidden;
+        
     }
     #restaurantEditForm{
         width:100%;
+        height:100%;
         overflow-y:scroll;
-        box-sizing: content-box;
+        overflow-x:hidden;
+        margin:0;
     }
     #restaurantEdit input{
         width:100%;
@@ -637,7 +712,7 @@ a, a:hover, a:active {
             padding-right: 19px;
             box-sizing: content-box;
             overflow-x:hidden;
-            max-height:30vh;
+            max-height:20vh;
             width:100%;
          
         }
@@ -645,7 +720,7 @@ a, a:hover, a:active {
             
             width:100%;
             padding:0.5em 1em;
-            
+            box-sizing:content-box;
             /*#3a3a3a;*/
         }
             #restaurantPopUp #reviews .currentReviews div:nth-child(odd){

@@ -183,11 +183,11 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.occasionOptions=[];
     
     $scope.restaurantList=[];
-    $scope.reduceRestaurantList=[];
+    $scope.restaurantListReduce=[];
     $scope.searchListText="";
 
     $scope.listOrder="name";
-    $scope.listOrderOptions=[{name: "Name",code:"name", reverse: false},{name:"Price- lowest to highest", code:"price", reverse: false}, {name:"Rating- lowest to highest", code:"avgRating", reverse: false}, {name:"Rating- highest to lowest", code:"avgRating", reverse: true}];
+    $scope.listOrderOptions=[{name: "Name",code:"name", reverse: false},{name:"Price- lowest to highest", code:"price", reverse: false}, {name:"Rating- lowest to highest", code:"avgRating", reverse: false}, {name:"Rating- highest to lowest", code:"reverseAvgRating", reverse: true}];
 
     $scope.chosenRestaurant={
         address: "Unknown",
@@ -407,13 +407,19 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
     }
     $scope.editSubmitRestaurant=function(){
+        console.log("the edit restaurant information is", $scope.editRestaurant);
         if(restaurantEditForm.address.$invalid ){
             $scope.chosenRestaurantEditSubmitResult="Restaurant information is not valid."
         }else{
             editRest.sendData($scope.editRestaurant).success(function(data){
-                $scope.chosenRestaurantEditSubmitResult="Restaurant information successfully changed."
-                $scope.chosenRestaurant=JSON.parse(JSON.stringify($scope.editRestaurant));
-                restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
+                //if(data!=="No documents found"){
+                    $scope.chosenRestaurantEditSubmitResult="Restaurant information successfully changed."
+                    $scope.chosenRestaurant=JSON.parse(JSON.stringify($scope.editRestaurant));
+                    restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
+                    $scope.reduceRestaurantList();
+                //}else{
+                //  $scope.chosenRestaurantEditSubmitResult="Restaurant information not successfully changed."   
+                //}
             }).error(function(error, status){
                 console.log(error);
                 $scope.chosenRestaurantEditSubmitResult="Restaurant information not changed due to internal error."
@@ -467,9 +473,27 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
     $scope.reduceRestaurantList=function(){
         console.log("search text is", $scope.searchListText)
+        console.log("restaurants")
         if($scope.searchListText=="") $scope.restaurantListReduce=JSON.parse(JSON.stringify($scope.restaurantList));
         else $scope.restaurantListReduce=$scope.querySearch($scope.searchListText, "list");
 
+    }
+
+    $scope.returnOrderValue=function(card){
+        //console.log($scope.listOrder.code);
+        //console.log(card);
+        switch($scope.listOrder.code){
+            case "price":
+                if(card.price=="") return 10
+                else return card.price.length
+            case "name":
+                return card.name
+            case "avgRating":
+                return card.avgRating
+            case "reverseAvgRating":
+                return -card.avgRating
+
+        }
     }
     
 
@@ -641,7 +665,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 if(data!= "No documents found"){
                     console.log("Data was successfully retrieved:", data);
                     $scope.restaurantList=data;
-                    $scope.restaurantListReduce=JSON.parse(JSON.stringify($scope.restaurantList));
+                    $scope.reduceRestaurantList();
                     addMarkers(data);
                 }else{
                     console.log(data);
@@ -692,7 +716,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
         $mdToast.show(toast).then(function(response) {
             if ( response == 'ok' ) {
-                $scope.removeItem(item.name);
+                $scope.removeItem(name);
             }
         });
     };

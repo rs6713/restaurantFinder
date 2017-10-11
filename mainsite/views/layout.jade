@@ -55,8 +55,25 @@ html(ng-app="eaHelper")
     //Filters and Map(Main activity)
     div.container-fluid(ng-controller="mainController")#toptop
       div.row
+
+        //Views to change page shown
+        div.col.col-sm-1.col-md-1.col-lg-1.col-sm-push-3#views
+          
+          div.page#map-view
+            i.fa.fa-map(aria-hidden="true") 
+            br 
+            |Map
+          div.page#list-view
+            i.fa.fa-th-list(aria-hidden="true")
+            br 
+            |List Search
+          div.page#add-view
+            i.fa.fa-plus-circle(aria-hidden="true")
+            br 
+            |Add Location
+
         //Filters
-        div.col.col-sm-3.col-md-3.col-lg-3#filters
+        div.col.col-sm-3.col-md-3.col-lg-3.col-sm-pull-1#filters
           div#innerfilters
             div.filter#category
               span Food Category
@@ -109,20 +126,7 @@ html(ng-app="eaHelper")
               rzslider#filterslider(rz-slider-model="ratings_bar.value", rz-slider-options="ratings_bar.options")
 
           
-        //Views to change page shown
-        div.col.col-sm-1.col-md-1.col-lg-1#views
-          div.page#map-view
-            i.fa.fa-map(aria-hidden="true") 
-            br 
-            |Map
-          div.page#list-view
-            i.fa.fa-th-list(aria-hidden="true")
-            br 
-            |List Search
-          div.page#add-view
-            i.fa.fa-plus-circle(aria-hidden="true")
-            br 
-            |Add Location
+
       
         div.col.col-sm-8.col-md-8.col-lg-8#mapContainer
           div#list
@@ -152,7 +156,7 @@ html(ng-app="eaHelper")
 
             div#listItems
 
-              div#listItem( ng-repeat="item in restaurantListReduce | orderBy :  listOrder.code : listOrder.reverse track by $index ")
+              div#listItem( ng-repeat="item in restaurantListReduce | orderBy :  returnOrderValue  track by $index ")
                 
                 div#titleList
                   h1 {{item.name}}

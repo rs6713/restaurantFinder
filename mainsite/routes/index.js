@@ -80,7 +80,7 @@ router.post('/deleteRestaurant', function(req, res){
 //Method to submit a new restaurant
 router.post('/editRestaurant', function(req, res){
   var data=req.body.data;
-
+    console.log(data);
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
   
@@ -99,7 +99,7 @@ router.post('/editRestaurant', function(req, res){
         var collection = db.collection('restaurants');
     
         // Find all students
-        collection.update({"name": data.name},data, function (err, result) {
+        collection.update({"name": data.name},{$set: data}, function (err, result) {
           if (err) {
             res.send(err);
           } else if (result.length) {
