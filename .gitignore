@@ -1,5 +1,5 @@
-mainsite/node_modules/
+./node_modules/
 
-mainsite/public/lib/
+./public/lib/
 
-mainsite/data/
+./data/

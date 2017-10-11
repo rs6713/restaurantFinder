@@ -44,7 +44,8 @@ router.post('/deleteRestaurant', function(req, res){
     var MongoClient = mongodb.MongoClient;
   
     // Define where the MongoDB server is
-    var url = 'mongodb://localhost:27017/mainsite';
+    // Depends on whether running from heroku of not
+    var url = process.env.HEROKU_RUNNING ? process.env.MONGODB_URI : 'mongodb://localhost:27017/mainsite';
     
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
