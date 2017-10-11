@@ -47,16 +47,20 @@ html, body{
         width:100%;
     }
     #filters{
-        padding:20vh 0 0 0;
+        padding:0 0 0 0;
         height:100vh;
         overflow:hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         
     }
     #innerfilters{
         width:100%;
-        height:100%;
+        max-height:100%;
         overflow-y:scroll;
         overflow-x:hidden;
+        padding-bottom:0.5em;
         /*padding-right: 19px;
         box-sizing: content-box;*/
         
@@ -122,7 +126,17 @@ a, a:hover, a:active {
         line-height:1em;
         position:relative;
         box-sizing:border-box;
+        
     }
+        #area, #occasion, #category{
+            cursor:pointer;
+        }
+            .dropdown input{
+                cursor:pointer;
+            }
+        #outdoor-seating input{
+            cursor:pointer;
+        }
         .fiter span{
             float:left;
           
@@ -183,6 +197,41 @@ a, a:hover, a:active {
         #rating, #price{
             padding: 2em 1em 3em 1em;
         }
+            #price #priceQuestion{
+                position:absolute;
+                top:1em;
+                right:1em;
+                width:2em;
+                height:2em;
+                padding-top:0.4em;
+                box-sizing:border-box;
+                line-height:1em;
+                text-align:center;
+                border-radius:100%;
+                background-color:#212121;
+                color:white;
+                border: 0.1em solid white;
+                box-shadow: 0 0 0.5em 0.1em #212121;
+                cursor:pointer; 
+                z-index: 21;
+            }
+            #price #priceOverlay{
+                width:100%;
+                height:100%;
+                background-color:#212121;
+                color:white;
+                padding:1em; 
+                position:absolute;
+                left:0;
+                top:0;
+                z-index:19;
+                display:none;
+            }
+                #priceOverlay span{
+                    position:absolute;
+                    right:1em;
+                    bottom:1em;
+                }
             #filterslider .rz-pointer{
                 width:1em;
                 height:1em;
@@ -218,6 +267,9 @@ a, a:hover, a:active {
 
     margin:0;
     background-color:#212121; 
+    
+}
+.page{
     cursor:pointer;
 }
 

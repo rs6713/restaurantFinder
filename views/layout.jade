@@ -116,6 +116,17 @@ html(ng-app="eaHelper")
               //each val in prices
                 div.point(name=val)
               //div.ball
+              div#priceQuestion 
+                b ?
+              div#priceOverlay
+                £&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 5-20 
+                br 
+                br
+                ££&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 20-50 
+                br
+                br
+                £££&nbsp;&nbsp; : &nbsp; 50+
+                span (pp)
               rzslider#filterslider(rz-slider-model="prices_bar.value", rz-slider-options="prices_bar.options")
             
             div.filter#rating

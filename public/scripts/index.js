@@ -3,7 +3,7 @@ var map;
 var markerArray=[];
 var price="££";
 var rating=3;
-
+var nbc = {lat:  51.51610, lng: -0.12728};
 
 
 
@@ -20,7 +20,7 @@ var defaultRest={
 var chosenRestaurant=defaultRest;
 
     var initMap=function() {
-        var nbc = {lat:  51.51610, lng: -0.12728};
+        
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
           center: nbc,
@@ -143,6 +143,8 @@ $(window).resize(function(){
     $('#restaurantEditForm').css({"width" : "100%"});
     var w=$('#restaurantEdit').outerWidth() +19;
     $('#restaurantEditForm').css({"width" : w+"px"});  
+
+    map.setCenter(nbc);
 });
 
 $(document).ready(function(){ 
@@ -170,6 +172,14 @@ $(document).ready(function(){
     $("#views, #filters").click( function () {
         $("#restaurantPopUp").css({top:"200%"});
     }); 
+
+    $("#price #priceQuestion").hover(function(){
+        $("#price #priceOverlay").fadeIn(300);//css({"visibility":"visible"});
+    });
+    $("#price #priceQuestion").mouseleave(function(){
+        $("#price #priceOverlay").fadeOut(300);//css({"visibility":"hidden"});
+    });
+
 
 
 
