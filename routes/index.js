@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const url = process.env.HEROKU_RUNNING ? process.env.MONGODB_URI : 'mongodb://localhost:27017/mainsite';
 
 /* GET home page. */
 // Defines the root route. router.get receives a path and a function
@@ -45,7 +46,7 @@ router.post('/deleteRestaurant', function(req, res){
   
     // Define where the MongoDB server is
     // Depends on whether running from heroku of not
-    var url = process.env.HEROKU_RUNNING ? process.env.MONGODB_URI : 'mongodb://localhost:27017/mainsite';
+    
     
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
@@ -84,9 +85,7 @@ router.post('/editRestaurant', function(req, res){
     console.log(data);
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
-  
-    // Define where the MongoDB server is
-    var url = 'mongodb://localhost:27017/mainsite';
+
     if(data.hasOwnProperty('avgRating')) delete data.avgRating;
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
@@ -127,9 +126,6 @@ router.post('/submitRestaurant', function(req, res){
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
   
-    // Define where the MongoDB server is
-    var url = 'mongodb://localhost:27017/mainsite';
-  
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
       if (err) {
@@ -165,9 +161,6 @@ router.get('/restaurantsAvail', function(req, res){
 
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
-  
-    // Define where the MongoDB server is
-    var url = 'mongodb://localhost:27017/mainsite';
   
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
@@ -268,10 +261,7 @@ router.get('/:areaOptions',function(req,res,next){
   
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
-  
-    // Define where the MongoDB server is
-    var url = 'mongodb://localhost:27017/mainsite';
-  
+
     // Connect to the server
     MongoClient.connect(url, function (err, db) {
       if (err) {
@@ -307,10 +297,7 @@ router.get('/', function(req, res, next) {
 
   // Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
- 
-  // Define where the MongoDB server is
-  var url = 'mongodb://localhost:27017/mainsite';
-  
+
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
