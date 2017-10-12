@@ -133,15 +133,15 @@ $(window).resize(function(){
     $('#innerfilters').css({"width" : "100%"});
     if($(window).width()>768){
         
-        var w=$('#innerfilters').outerWidth() +19;
+        var w=$('#innerfilters').outerWidth() + $("#innerfilters")[0].offsetWidth-$("#innerfilters")[0].clientWidth;
         $('#innerfilters').css({"width" : w+"px"});    
     }
     $('#listItems').css({"width" : "100%"});
-    var w=$('#listItems').outerWidth() +19;
+    var w=$('#listItems').outerWidth() + $('#listItems')[0].offsetWidth-$('#listItems')[0].clientWidth;
     $('#listItems').css({"width" : w+"px"});  
 
     $('#restaurantEditForm').css({"width" : "100%"});
-    var w=$('#restaurantEdit').outerWidth() +19;
+    var w=$('#restaurantEdit').outerWidth() + $('#restaurantEdit')[0].offsetWidth-$('#restaurantEdit')[0].clientWidth;
     $('#restaurantEditForm').css({"width" : w+"px"});  
 
     map.setCenter(nbc);
@@ -151,13 +151,13 @@ $(document).ready(function(){
 
     //var p=$('#innerfilters').outerWidth() - $('#innerfilters').innerWidth() + "px";
     if($(window).width()>768){
-        var w=$('#innerfilters').outerWidth() +19;
+        var w=$('#innerfilters').outerWidth() +$("#innerfilters")[0].offsetWidth-$("#innerfilters")[0].clientWidth;
         $('#innerfilters').css({"width" : w+"px"});
     }
-    var w=$('#listItems').outerWidth() +19;
+    var w=$('#listItems').outerWidth()+ $('#listItems')[0].offsetWidth-$('#listItems')[0].clientWidth;
     $('#listItems').css({"width" : w+"px"}); 
 
-    var w=$('#restaurantPopUp  #restaurantEdit').outerWidth() +19;
+    var w=$('#restaurantPopUp  #restaurantEdit').outerWidth() + $('#restaurantEdit')[0].offsetWidth-$('#restaurantEdit')[0].clientWidth;
     $('#restaurantEditForm').css({"width" : w+"px"}); 
 
     //Stop pressing enter, prematurely submitting form
