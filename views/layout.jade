@@ -24,14 +24,14 @@ html(ng-app="eaHelper")
     link( rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous") 
     //Optional theme
     link( rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css", integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp", crossorigin="anonymous")
-    <!-- Angular Material style sheet -->
+    //<!-- Angular Material style sheet -->
     link(rel="stylesheet", href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css")
 
 
     script(src="https://use.fontawesome.com/1079ce90fa.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
     
-     //Angular
+    //Angular
     link(rel="stylesheet", href="lib/angularjs-slider/dist/rzslider.css")
     script(src='/lib/angular/angular.js')
     script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js")
@@ -116,7 +116,7 @@ html(ng-app="eaHelper")
               //each val in prices
                 div.point(name=val)
               //div.ball
-              div#priceQuestion 
+              //div#priceQuestion 
                 b ?
               div#priceOverlay
                 £&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 5-20 
@@ -213,12 +213,11 @@ html(ng-app="eaHelper")
 
 
           div#map
+          div#mapOverlay
           div#submitContainer
             div#submit
               h3 
                 b Enter Restaurant Details
-              //var restQualities=["address", "name", "cuisine", "outdoor seating", "website", "reviews", "avgRating", "price"];
-              
               //Name
               form(name="restaurantSubmissionForm")
                 table
@@ -247,19 +246,25 @@ html(ng-app="eaHelper")
                   
                   tr  
                     //Website  
-                    td Website:
+                    td Website:*
                     td
                       div.input-group
                         span.input-group-addon#restaurant-website https://www.
                         input.form-control#websiteSelect( aria-describedby="Select-a-website", placeholder="Restauarant Website", ng-model="newRestaurant.website" type="text")    
                 
                   tr
-                    td Area:
+                    td Area:*
                     td    
-                  
                       //chips showing all contents of new restaurant cuisine
-                      md-chips(ng-model="newRestaurantArea", md-removable="true",
-                      md-transform-chip="undefined", md-require-match="false", md-max-chips="1")
+                      .dropdown
+                        button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenuButton", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                          | Area
+                        div.dropdown-menu(aria-labelledby="dropdownMenuButton")
+                          a.dropdown-item(ng-repeat="item in areaOptions") 
+                            | {{item.name}}
+
+                      //md-chips(ng-model="newRestaurantArea", md-removable="true",
+                      //md-transform-chip="undefined", md-require-match="false", md-max-chips="1")
                         //- transformChip($chip)
                         md-autocomplete(
                         md-autocomplete-snap, 
@@ -275,7 +280,7 @@ html(ng-app="eaHelper")
                             strong {{$chip}}  
                 
                   tr    
-                    td Price:
+                    td Price:*
                     //Price
                     td
                       div.btn-group(data-toggle="buttons")
@@ -285,7 +290,7 @@ html(ng-app="eaHelper")
                 
                   tr
                     //Outdoor Seating
-                    td Outdoor Seating:
+                    td Outdoor Seating:*
                     td
                       div.btn-group(data-toggle="buttons", id="outdoorSelect")
                         label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="newRestaurant.outdoorSeating=opt")
@@ -293,7 +298,7 @@ html(ng-app="eaHelper")
                           | {{opt}}
 
                   tr
-                    td Categories:
+                    td Categories:*
                     td    
                   
                       //chips showing all contents of new restaurant cuisine
@@ -313,7 +318,7 @@ html(ng-app="eaHelper")
                           span
                             strong {{$chip}}   
                   tr
-                    td Occasions:
+                    td Occasions:*
                     td    
                       //chips showing all contents of new restaurant ocassion
                       md-chips(ng-model="newRestaurant.occasion", md-removable="true",
@@ -328,17 +333,16 @@ html(ng-app="eaHelper")
                           md-item-template
                             span(md-highlight-text="searchText")
                             strong {{item}}
-                        md-chip-template
-                          span
-                            strong {{$chip}}   
+                          md-chip-template
+                            span
+                              strong {{$chip}}   
                   tr
-                    td Review:
+                    td Your Review:*
                     td
                       .input-group#enter-review
-                        input(type="text", class="form-control",placeholder="Review", aria-describedby="Restaurant Address" ng-model="newRestaurantReview")                
+                        input(type="text", class="form-control", placeholder="Review", aria-describedby="Restaurant Address" ng-model="newRestaurantReview")                
                   tr
-                    td Rating: 
-                      
+                    td Your Rating:*         
                     td#ratingSliderContainer 
                       br
                       rzslider#ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
@@ -470,11 +474,11 @@ html(ng-app="eaHelper")
                   form(name="restaurantReviewForm")
                     table 
                       tr 
-                        td Review:
+                        td Your Review:
                         td
                           input(type="text",  ng-model="newReview", min-length, name="review", required)
                       tr 
-                        td Rating:
+                        td Your Rating:
                         td
                           rzslider#ratingslider(rz-slider-model="restaurantReviewSlider.value", rz-slider-options="restaurantReviewSlider.options")
 

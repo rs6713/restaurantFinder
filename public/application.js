@@ -26,6 +26,7 @@ mainApp.factory('occasionOptions', ['$http', function($http){
     return $http.get('/occasion');
 }]);
 
+//Factory function to get latitude, longitude
 mainApp.factory('googleURL', ['$http',  function($http){
     var googleLat={};
     googleLat.getLatLng=function(urlG){
@@ -247,7 +248,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
 
     var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating"];
-    $scope.priceOptions= ["£", "££", "£££"];
+    $scope.priceOptions= ["£5-20", "£20-50", "£50+"];
     $scope.outdoorSeatingOptions=["Yes", "No"];
 
 
@@ -392,6 +393,10 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             if($scope.newRestaurantReview!=="") $scope.newRestaurant.review.push($scope.newRestaurantReview);
             if(!$scope.restaurantRatingSlider.options.disabled) $scope.newRestaurant.rating.push($scope.restaurantRatingSlider.value);
             
+            var newRest= $scope.newRestaurant;
+            var priceAct={"£5-20": "£", "£20-50":"££", "£50+": "£££"};
+            newRest.price= priceAct[newRest.price];
+
             submitRest.sendData($scope.newRestaurant).success(function(data){
                 $scope.chosenRestaurantSubmitResult="Restaurant information successfully added."
             }).error(function(error, status){
@@ -586,7 +591,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.prices_bar = {
         value: 0,
         options: {
-            stepsArray: ["£", "££", "£££"],
+            stepsArray: ["£5-20", "£20-50", "£50+"],
             showSelectionBar: true,
             showTicks:true,
             getSelectionBarColor: function(value) {

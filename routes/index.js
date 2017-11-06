@@ -122,7 +122,7 @@ router.post('/editRestaurant', function(req, res){
 //Method to submit a new restaurant
 router.post('/submitRestaurant', function(req, res){
   var data=req.body.data;
-
+    
     // Get a Mongo client to work with the Mongo server
     var MongoClient = mongodb.MongoClient;
   
@@ -183,6 +183,8 @@ router.get('/restaurantsAvail', function(req, res){
         var rating= JSON.parse(req.query.props).rating;
         var occasions= JSON.parse(req.query.props).occasion;
 
+        var priceAct={"£5-20": "£", "£20-50":"££", "£50+": "£££"};
+        price=priceAct[price];
         var queryComplete={};
         if(areas.length>0) queryComplete.area={ '$in':  areas};
         if(cuisines.length>0 ) queryComplete.cuisine=  { "$elemMatch": { "$in": cuisines } };
@@ -191,6 +193,7 @@ router.get('/restaurantsAvail', function(req, res){
 
         var matchComplete={};
         var priceMatch={};
+
         console.log("The price length is", price.length);
         
         priceMatch["$match"]= { $or:[{ "priceL": {"$lte": price.length}},{"priceL": 0}  ]};

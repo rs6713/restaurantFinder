@@ -91,6 +91,7 @@ var chosenRestaurant=defaultRest;
         //Setup min height according to info
         $('#restaurantPopUp').css({"min-height":0});
 
+        $("#mapOverlay").css({"display":"block"});
         $("#restaurantInfo").css({"display":"block"});
         $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"none"});
@@ -169,8 +170,9 @@ $(document).ready(function(){
     });
 
     //Click off restaurant pop up, stop propagation
-    $("#views, #filters").click( function () {
+    $("#views, #filters, #mapOverlay").click( function () {
         $("#restaurantPopUp").css({top:"200%"});
+        $("#mapOverlay").css({"display":"none"});
     }); 
 
     $("#price #priceQuestion").hover(function(){
