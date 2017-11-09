@@ -115,6 +115,25 @@ mainApp.directive("minLength", function(){
         }
     };
 });
+//Phone numbers are 11 numbers long
+mainApp.directive("phoneLength", function(){
+    return {
+        require:"ngModel",
+        link: function(scope, element, attr, mCtrl){
+            function myValidation(value){
+                console.log(value);
+                var trimVal= value.replace(/\s/g,'');
+                if(  trimVal.length!=11){
+                    mCtrl.$setValidity('lengthName', false);
+                }else{
+                    mCtrl.$setValidity('lengthName', true);
+                }
+                return value;
+            }
+            mCtrl.$parsers.push(myValidation);
+        }
+    };
+});
 
 mainApp.directive('backImg', function(){
     return function(scope, element, attrs){
@@ -199,6 +218,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         website: "Unknown",
         reviews: [],
         avgRating: 0,
+        phone: "Unknown",
         rating:[]
     };
 
@@ -216,17 +236,31 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         occasion:[],
         outdoorSeating:"",
         price: "",
-        website:""
+        website:"",
+        phone:""
     };
-    $scope.editRestaurant={};
+    $scope.editRestaurant={
+        address:"",
+        area:"",
+        name:"",
+        rating:[],
+        review:[],
+        cuisine:[],
+        occasion:[],
+        outdoorSeating:"",
+        price: "",
+        website:"",
+        phone:""
+    };
+    //$scope.editRestaurantOccasion={};
     $scope.newRestaurantArea=[];
     $scope.newRestaurantReview="";
     $scope.restaurantRatingSlider={
-            value:1,
+            value:3,
             options:{
                 ceil:5,
                 floor:1,
-                disabled:true,
+                //disabled:true,
                 showSelectionBar: true,
                 showTicks:true,
                 getSelectionBarColor: function(val){ return "#3A4D9E"}
@@ -244,8 +278,20 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     };
     $scope.newReview="";
 
-
-
+   
+      $scope.toggle = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+          list.splice(idx, 1);
+        }
+        else {
+          list.push(item);
+        }
+        $scope.$apply();
+      };
+    $scope.exists = function (item, list) {
+        return list.indexOf(item) > -1;
+      };
 
     var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating"];
     $scope.priceOptions= ["£5-20", "£20-50", "£50+"];
@@ -262,6 +308,16 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     //Handle transfer info from chosen restaurant to edit restaurant
     $scope.editRestaurantFill=function(){
         $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
+        /*
+        for(var i=0; i< $scope.occasionOptions.length;i++){
+            $scope.editRestaurantOccasion[$scope.occasionOptions[i].name]=false;
+        }
+        for( var i=0; i< $scope.editRestaurant.occasion.length; i++){
+            $scope.editRestaurantOccasion[$scope.editRestaurant.occasion[i]]=true;
+        }
+        console.log($scope.editRestaurant.occasion);
+        console.log($scope.editRestaurantOccasion);
+        */
     }
 
     //Handle marker click
@@ -404,10 +460,11 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 $scope.chosenRestaurantSubmitResult="Restaurant information not added due to internal error."
             });
             //reset form
+            /*
             restaurantSubmissionForm.reset(function(){
                 $scope.restaurantRatingSlider.options.disabled=true;
             });
-            
+            */
         }
 
     }
@@ -595,7 +652,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             showSelectionBar: true,
             showTicks:true,
             getSelectionBarColor: function(value) {
-                return "white";
+                return "#3A4D9E";
             }
         }
     };
@@ -605,7 +662,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         options: {
             showSelectionBar: true,
             showTicks:true,
-            getSelectionBarColor: function(val){ return "white"}
+            getSelectionBarColor: function(val){ return "#3a4d9e"}
             /* function(value) {
                 if (value <= 1)
                     return 'red';

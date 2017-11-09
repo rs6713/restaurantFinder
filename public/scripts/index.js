@@ -112,6 +112,7 @@ var chosenRestaurant=defaultRest;
         $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"none"}); 
         $('#restaurantPopUp').css({"min-height":0});
+        $('#mapOverlay').css({"display":"block"});
         switch(popType){
             case "info":
                 $("#infoBtn").css({"background-color":"#3A4D9E"});
@@ -150,6 +151,8 @@ $(window).resize(function(){
 
 $(document).ready(function(){ 
 
+    $('#listFilters').css({"display":"none"});
+
     //var p=$('#innerfilters').outerWidth() - $('#innerfilters').innerWidth() + "px";
     if($(window).width()>768){
         var w=$('#innerfilters').outerWidth() +$("#innerfilters")[0].offsetWidth-$("#innerfilters")[0].clientWidth;
@@ -182,12 +185,7 @@ $(document).ready(function(){
         $("#price #priceOverlay").fadeOut(300);//css({"visibility":"hidden"});
     });
 
-
-
-
-    
     //Handle click events associated with pop up Restaurant Info
-
     $("#infoBtn").click(function(){
         $("#restaurantInfo").css({"display":"block"});
         $("#reviews").css({"display":"none"});
@@ -230,47 +228,55 @@ $(document).ready(function(){
         });
     });
 
-    $('#map-view').css({"color":"#212121", "background-color":"white" });
+    $('#map-view').css({"background-color":"#4a4a4a" , "border-top": "3px solid black"});
     //Handle main clicking menu choices
     $('#map-view').click(function(){
         $("#map").css({"display":"block"});
         $("#list").css({"display":"none"});
         $("#submitContainer").css({"display":"none"});
-        $('#map-view').css({"color":"#212121", "background-color":"white" });
-        $('#list-view').css({"color":"white", "background-color":"#212121" });
-        $('#add-view').css({"color":"white", "background-color":"#212121" });
+        $('#listFilters').css({"display":"none"});
+        $('#map-view').css({"background-color":"#4a4a4a" , "border-top": "3px solid black" });
+        $('#list-view').css({"color":"white", "background-color":"#212121" , "border-top":"none"});
+        $('#add-view').css({"color":"white", "background-color":"#212121" , "border-top":"none"});
     });
     $('#add-view').click(function(){
         $("#map").css({"display":"none"});
         $("#list").css({"display":"none"});
+        $('#listFilters').css({"display":"none"});
         $("#submitContainer").css({"display":"block"});
-        $('#add-view').css({"color":"#212121", "background-color":"white" });
-        $('#list-view').css({"color":"white", "background-color":"#212121" });
-        $('#map-view').css({"color":"white", "background-color":"#212121" });
+        $('#add-view').css({ "background-color":"#4a4a4a" , "border-top": "3px solid black" });
+        $('#list-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
+        $('#map-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
         $(window).resize();
     });
     $('#list-view').click(function(){
         $("#map").css({"display":"none"});
+        $('#listFilters').css({"display":"block"});
         $("#submitContainer").css({"display":"none"});
         $("#list").css({"display":"flex"});
-        $('#map-view').css({"color":"white", "background-color":"#212121" });
-        $('#add-view').css({"color":"white", "background-color":"#212121" });
-        $('#list-view').css({"color":"#212121", "background-color":"white" });
+        $('#map-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
+        $('#add-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
+        $('#list-view').css({ "background-color":"#4a4a4a" , "border-top": "3px solid black" });
         $(window).resize();
     });
 
     
     $('.page').mouseover(function(){
-        
-        if($(this)[0].style.backgroundColor!="rgb(255, 255, 255)"){
-            //console.log("mouse over",$(this)[0].style.backgroundColor );
+        //console.log($(this)[0].style);
+        console.log("mousey", $(this).css('background-color'));
+        //console.log("mouse over",$(this)[0].style.backgroundColor);
+        if($(this).css('background-color')!=='rgb(74, 74, 74)'){//rgb(33,33,33) #212121 $(this)[0].style.backgroundColor
+            console.log("mousey", $(this).css('background-color'));
+            console.log("mouse over",$(this)[0].style.backgroundColor);
             $(this).css({"background-color": "#121212"});
         }
     });
-    $('.page').mouseout(function(){
-        
-        if($(this)[0].style.backgroundColor!="rgb(255, 255, 255)"){
-            //console.log("mouse out",$(this)[0].style.backgroundColor );
+
+    $('.page').mouseout(function(){      
+        //console.log("mouse out",$(this)[0].style.backgroundColor);
+        console.log("mousey", $(this).css('background-color'));
+        if($(this).css('background-color')!=='rgb(74, 74, 74)'){
+            console.log("mouse out",$(this)[0].style.backgroundColor);
             $(this).css({"background-color": "#212121"});
         }
     });

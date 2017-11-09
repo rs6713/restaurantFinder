@@ -30,7 +30,8 @@ html(ng-app="eaHelper")
 
     script(src="https://use.fontawesome.com/1079ce90fa.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
-    
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js")
+
     //Angular
     link(rel="stylesheet", href="lib/angularjs-slider/dist/rzslider.css")
     script(src='/lib/angular/angular.js')
@@ -74,69 +75,82 @@ html(ng-app="eaHelper")
 
         //Filters
         div.col.col-sm-3.col-md-3.col-lg-3.col-sm-pull-1#filters
-          div#innerfilters
-            div.filter#category
-              span Food Category
-              i.fa.fa-chevron-down(aria-hidden="true")
-            div.dropdown(name="category")
-              //- cat options is a nameless array
-              span(ng-repeat="cat in catOptions  | orderBy : 'name' track by $index") 
-                | {{cat.name}} 
-                //{{cat.selected}}
-                input(type="checkbox",  ng-model="catOptions[$index].selected")
-                  
-                //each restaurant in restaurantlist
-                  span= restaurant.name
+          div#listFilters
+              div.filter.searchFilter
+                  md-input-container(class="md-block", flex-gt-sm)
+                    label Order By
+                    md-select( ng-model="listOrder")
+                      md-option(ng-repeat="ord in listOrderOptions", ng-value="ord")
+                        {{ ord.name}}
+              div.filter.searchFilter
+                  md-input-container(flex-gt-sm, class="md-block md-input-has-placeholder")
+                    label Search for restaurant
+                    input(ng-model="searchListText", ng-change="reduceRestaurantList()")              
+          div#filterscenter
+              //div#filterscenterfill
+              div#innerfilters
+                div.filter#category
+                  span Food Category
+                  i.fa.fa-chevron-down(aria-hidden="true")
+                div.dropdown(name="category")
+                  //- cat options is a nameless array
+                  span(ng-repeat="cat in catOptions  | orderBy : 'name' track by $index") 
+                    | {{cat.name}} 
+                    //{{cat.selected}}
+                    input(type="checkbox",  ng-model="catOptions[$index].selected")
+                      
+                    //each restaurant in restaurantlist
+                      span= restaurant.name
 
-            div.filter#area
-              span Area
-              i.fa.fa-chevron-down(aria-hidden="true")
-            div.dropdown(name="area")
-              span(ng-repeat="area in areaOptions | orderBy : 'name'") 
-                |{{area.name}} 
-                // {{area.selected}}
-                input(type="checkbox", ng-model="area.selected")
-              //each restaurant in restaurantlist
-                span= restaurant.area
+                div.filter#area
+                  span Area
+                  i.fa.fa-chevron-down(aria-hidden="true")
+                div.dropdown(name="area")
+                  span(ng-repeat="area in areaOptions | orderBy : 'name'") 
+                    |{{area.name}} 
+                    // {{area.selected}}
+                    input(type="checkbox", ng-model="area.selected")
+                  //each restaurant in restaurantlist
+                    span= restaurant.area
 
-            div.filter#occasion
-              span Occasion
-              i.fa.fa-chevron-down(aria-hidden="true")
-            div.dropdown(name="occasion")
-              span(ng-repeat="occ in occasionOptions | orderBy : 'name'") 
-                |{{occ.name}} 
-                input(type="checkbox", ng-model="occ.selected")
+                div.filter#occasion
+                  span Occasion
+                  i.fa.fa-chevron-down(aria-hidden="true")
+                div.dropdown(name="occasion")
+                  span(ng-repeat="occ in occasionOptions | orderBy : 'name'") 
+                    |{{occ.name}} 
+                    input(type="checkbox", ng-model="occ.selected")
 
-            div.filter#outdoor-seating
-              span Outdoor Seating
-              input(type="checkbox" ng-model="outdoor")          
+                div.filter#outdoor-seating
+                  span Outdoor Seating
+                  input(type="checkbox" ng-model="outdoor")          
 
-            div.filter#price
-              span Max Price
-              //each val in prices
-                div.point(name=val)
-              //div.ball
-              //div#priceQuestion 
-                b ?
-              div#priceOverlay
-                £&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 5-20 
-                br 
-                br
-                ££&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 20-50 
-                br
-                br
-                £££&nbsp;&nbsp; : &nbsp; 50+
-                span (pp)
-              rzslider#filterslider(rz-slider-model="prices_bar.value", rz-slider-options="prices_bar.options")
+                div.filter#price
+                  span Max Price
+                  //each val in prices
+                    div.point(name=val)
+                  //div.ball
+                  //div#priceQuestion 
+                    b ?
+                  div#priceOverlay
+                    £&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 5-20 
+                    br 
+                    br
+                    ££&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; 20-50 
+                    br
+                    br
+                    £££&nbsp;&nbsp; : &nbsp; 50+
+                    span (pp)
+                  rzslider#filterslider(rz-slider-model="prices_bar.value", rz-slider-options="prices_bar.options")
+                
+                div.filter#rating
+                  span Min Average Rating 
+                  //each val in ratings
+                    div.point(name=val)
+                  //div.ball
+                  rzslider#filterslider(rz-slider-model="ratings_bar.value", rz-slider-options="ratings_bar.options")
+
             
-            div.filter#rating
-              span Min Average Rating 
-              //each val in ratings
-                div.point(name=val)
-              //div.ball
-              rzslider#filterslider(rz-slider-model="ratings_bar.value", rz-slider-options="ratings_bar.options")
-
-          
 
       
         div.col.col-sm-8.col-md-8.col-lg-8#mapContainer
@@ -146,7 +160,7 @@ html(ng-app="eaHelper")
 
 
               
-              md-content()
+              //md-content()
                 div(layout-gt-sm="row") 
                   md-input-container(class="md-block", flex-gt-sm)
                     label Order By
@@ -216,113 +230,202 @@ html(ng-app="eaHelper")
           div#mapOverlay
           div#submitContainer
             div#submit
-              h3 
-                b Enter Restaurant Details
+
               //Name
               form(name="restaurantSubmissionForm")
-                table
-                  tr
-                    td Name:*
-                    td
-                      .input-group#enter-name
+
+                      //.input-group#enter-name.enter-detail
                         input(type="text", class="form-control", name="name",placeholder="Restaurant Name", aria-describedby="Restaurant Name", ng-model="newRestaurant.name" required min-length)
-                      span(ng-show="restaurantSubmissionForm.name.$touched && restaurantSubmissionForm.name.$invalid")
+                      //span(ng-show="restaurantSubmissionForm.name.$touched && restaurantSubmissionForm.name.$invalid")
                         | A restaurant name is required to be at least 2 chars.
-                      span(ng-show="restaurantSubmissionForm.name.$minLength")
-                        | Length of name must be above 2 chars
-                      span(ng-show="restaurantSubmissionForm.name.minLength")
-                        | Length of name must be above 2 chars
-                      span(ng-show="restaurantSubmissionForm.name.min-length")
-                        | Length of name must be above 2 chars
-                
-                  tr
-                    td Address:*
-                    td
-                      //Address
-                      .input-group#enter-address
-                        input(type="text",name="address" class="form-control",placeholder="Restaurant Address", aria-describedby="Restaurant Address", ng-model="newRestaurant.address" required min-length)
-                      span(ng-show="restaurantSubmissionForm.address.$touched && restaurantSubmissionForm.address.$invalid")
-                        | A restaurant address is required to be at least 2 chars.                
-                  
-                  tr  
-                    //Website  
-                    td Website:*
-                    td
-                      div.input-group
+                      div(layout="row", layout-wrap).legendpadding
+                        | Restaurant Contact Details
+                        legend
+
+                      div(layout="row", layout-wrap)
+                        div(flex="100", flex-gt-sm="50", layout="column")                 
+                          md-input-container.md-block
+                            label Restaurant Name
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="name", ng-model="newRestaurant.name", minlength="5", maxlength="50")
+                            div(ng-messages="newRestaurant.name.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant name must be between 5 and 50 characters long.
+
+                        //Address
+                        //.input-group#enter-address.enter-detail
+                          input(type="text",name="address" class="form-control",placeholder="Restaurant Address", aria-describedby="Restaurant Address", ng-model="newRestaurant.address", required min-length)
+                        //span(ng-show="restaurantSubmissionForm.address.$touched && restaurantSubmissionForm.address.$invalid")
+                          | A restaurant address is required to be at least 2 chars.    
+                        div(flex="100", flex-gt-sm="50", layout="column")                        
+                          md-input-container.md-block
+                            label Restaurant Address
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="address", ng-model="newRestaurant.address", minlength="5", maxlength="100")
+                            div(ng-messages="newRestaurant.address.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant address must be between 5 and 100 characters long.            
+
+                      //div.input-group.enter-detail
                         span.input-group-addon#restaurant-website https://www.
-                        input.form-control#websiteSelect( aria-describedby="Select-a-website", placeholder="Restauarant Website", ng-model="newRestaurant.website" type="text")    
-                
-                  tr
-                    td Area:*
-                    td    
-                      //chips showing all contents of new restaurant cuisine
-                      .dropdown
-                        button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenuButton", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
-                          | Area
-                        div.dropdown-menu(aria-labelledby="dropdownMenuButton")
-                          a.dropdown-item(ng-repeat="item in areaOptions") 
-                            | {{item.name}}
+                        input.form-control#websiteSelect( class="form-control", name="website", aria-describedby="Select-a-website", placeholder="Restauarant Website", ng-model="newRestaurant.website", type="text", required min-length)    
+                      div(layout="row", layout-wrap)
+                        div(flex="100", flex-gt-sm="50", layout="column") 
+                          md-input-container.md-block
+                            label Restaurant Website
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="website", ng-model="newRestaurant.website", minlength="5", maxlength="30", ng-pattern="/^.+.+\..+.+\..+$/")
+                            div(ng-messages="newRestaurant.website.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
+                                //, 'pattern'
+                                | The restaurant website must be between 5 and 30 characters long.  
 
-                      //md-chips(ng-model="newRestaurantArea", md-removable="true",
-                      //md-transform-chip="undefined", md-require-match="false", md-max-chips="1")
-                        //- transformChip($chip)
-                        md-autocomplete(
-                        md-autocomplete-snap, 
-                        md-items="item in querySearch(searchText, 'area')", 
-                        md-item-text="item",
-                        md-search-text="searchText",
-                        placeholder="Covent Garden, Soho...")
-                          md-item-template
-                            span(md-highlight-text="searchText")
-                            strong {{item}}
-                        md-chip-template
-                          span
-                            strong {{$chip}}  
-                
-                  tr    
-                    td Price:*
-                    //Price
-                    td
-                      div.btn-group(data-toggle="buttons")
-                        label.btn.btn-primary(ng-repeat="opt in priceOptions", ng-click="newRestaurant.price=opt")
-                          input(type="radio", id="{{opt}}", ng-value="'{{opt}}'",  name="price")
-                          {{opt}}                      
-                
-                  tr
-                    //Outdoor Seating
-                    td Outdoor Seating:*
-                    td
-                      div.btn-group(data-toggle="buttons", id="outdoorSelect")
-                        label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="newRestaurant.outdoorSeating=opt")
-                          input(type="radio", ng-model="newRestaurant.outdoorSeating", id="{{opt}}",  ng-value="'{{opt}}'",  name="outdoor")
-                          | {{opt}}
+                        //div.input-group.enter-detail
+                          input.form-control#phoneSelect(name="phone", class="form-control",aria-describedby="Select-a-phonenumber", placeholder="***** ******", ng-model="newRestaurant.phone", type="text", required phone-length)    
 
-                  tr
-                    td Categories:*
-                    td    
-                  
+                        div(flex="100", flex-gt-sm="50", layout="column")                     
+                          md-input-container.md-block
+                            label Restaurant Phone Number
+                            //ng-pattern="/^.+@.+\..+$/"
+                            //  ^(0|[1-9][0-9]*)$
+                            input(required, type="text", name="phone", ng-model="newRestaurant.phone", minlength="11", maxlength="30", pattern="***** ******")
+                            //, ng-pattern="/^.+.+\..+.+\..+$/" , 'pattern'
+                            div(ng-messages="newRestaurant.phone.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant phone number must be between 11 numbers long.  
+                      br 
+                      br
+                      div(layout="row", layout-wrap).legendpadding
+                        | Restaurant Type and Food
+                        legend
+
+                      div(layout="row", layout-wrap)
+                        div(flex="100", flex-gt-sm="33", layout="column")                                  
+                          //chips showing all contents of new restaurant cuisine
+                          md-input-container(name="area", class="md-block", flex-gt-sm).droppy
+                            label Area
+                            md-select( ng-model="newRestaurantArea", required).enter-detail
+                              md-option(ng-repeat="item in areaOptions", ng-value="'{{item.name}}'")
+                                {{ item.name}}
+                      
+
+                          //.dropdown(name="area", ng-model="newRestaurantArea", required).enter-detail
+                            button.btn.btn-default.dropdown-toggle(type="button", id="dropdownMenu1", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true" )
+                              | Location
+                              span.caret
+                            ul.dropdown-menu(aria-labelledby="dropdownMenu1")
+                              li(ng-repeat="item in areaOptions", ng-value="'{{item.name}}'") {{item.name}}
+
+
+                          //.dropdown
+                            button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenuButton", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                              | Area
+                            div.dropdown-menu(aria-labelledby="dropdownMenuButton")
+                              a.dropdown-item(ng-repeat="item in areaOptions") 
+                                | {{item.name}}
+
+                          //md-chips(ng-model="newRestaurantArea", md-removable="true",
+                          //md-transform-chip="undefined", md-require-match="false", md-max-chips="1")
+                            //- transformChip($chip)
+                            md-autocomplete(
+                            md-autocomplete-snap, 
+                            md-items="item in querySearch(searchText, 'area')", 
+                            md-item-text="item",
+                            md-search-text="searchText",
+                            placeholder="Covent Garden, Soho...")
+                              md-item-template
+                                span(md-highlight-text="searchText")
+                                strong {{item}}
+                            md-chip-template
+                              span
+                                strong {{$chip}}  
+
+                          //div.btn-group(data-toggle="buttons")
+                            label.btn.btn-primary(ng-repeat="opt in priceOptions", ng-click="newRestaurant.price=opt")
+                              input(type="radio", id="{{opt}}", ng-value="'{{opt}}'",  name="price", required)
+                              {{opt}}  
+                                            
+                        div(flex="100", flex-gt-sm="33", layout="column")      
+                          md-input-container(name="price", class="md-block", flex-gt-sm).droppy
+                            label Price
+                            md-select( ng-model="newRestaurant.price", required)
+                              md-option(ng-repeat="item in priceOptions", ng-value="'{{item}}'")
+                                {{ item}}  
+           
+
+                          //div.btn-group(data-toggle="buttons", id="outdoorSelect")
+                            label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="newRestaurant.outdoorSeating=opt")
+                              input(type="radio", ng-model="newRestaurant.outdoorSeating", id="{{opt}}",  ng-value="'{{opt}}'",  name="outdoor", required)
+                              | {{opt}}
+
+                        div(flex="100", flex-gt-sm="33", layout="column") 
+                          md-input-container(name="outdoor", class="md-block", flex-gt-sm).droppy
+                            label Outdoor Seating
+                            md-select( ng-model="newRestaurant.outdoorSeating", required)
+                              md-option(ng-repeat="item in outdoorSeatingOptions", ng-value="'{{item}}'")
+                                {{ item}}  
+
+
                       //chips showing all contents of new restaurant cuisine
-                      md-chips(ng-model="newRestaurant.cuisine", md-removable="true",
-                      md-transform-chip="undefined", md-require-match="false")
-                        //- transformChip($chip)
-                        md-autocomplete(
-                        md-autocomplete-snap, 
-                        md-items="item in querySearch(searchText, 'cat')", 
-                        md-item-text="item",
-                        md-search-text="searchText",
-                        placeholder="American/Curry...")
-                          md-item-template
-                            span(md-highlight-text="searchText")
-                            strong {{item}}
-                        md-chip-template
-                          span
-                            strong {{$chip}}   
-                  tr
-                    td Occasions:*
-                    td    
-                      //chips showing all contents of new restaurant ocassion
-                      md-chips(ng-model="newRestaurant.occasion", md-removable="true",
-                      md-transform-chip="undefined", md-require-match="false")
+                      //md-input-container(name="area", class="md-block", flex-gt-sm)
+                        label Occasions
+                        md-select( ng-model="newRestaurantArea", required).enter-detail
+                          md-option(ng-repeat="item in occasionOptions", ng-value="'{{item.name}}'")
+                            {{ item.name}}
+                      //div(layout="row", layout-wrap).legendpadding
+                        div(flex="50", layout="column").mdinputpadding
+                          |Occasions
+                        div(flex="50", layout="column").mdinputpadding
+                          |Cuisines
+                        legend
+
+                      //div(layout="row", layout-wrap).legendpadding
+                        | Restaurant Type
+                        legend
+
+
+                      div(layout="row", layout-wrap)
+                        div(flex="100", flex-gt-sm="50", layout="column").mdinputpadding
+                            div
+                              fieldset.standard
+                                //legend Occasions
+                                div(layout="row", layout-wrap, flex)
+                                  div( flex="50", ng-repeat="item in occasionOptions")
+                                    md-checkbox( ng-checked="exists(item, newRestaurant.occasion)" ng-click="toggle(item, newRestaurant.occasion)", class="md-secondary")
+                                    {{ item.name }} 
+                                  div(ng-messages="newRestaurant.occasion.length==0")
+                                    div(ng-message="required") This field is required
+
+                        div(flex="100", flex-gt-sm="50", layout="column").mdinputpadding
+                            div
+                              //legend Cuisines
+                              md-chips(ng-model="newRestaurant.cuisine", md-removable="true",
+                              md-transform-chip="undefined", md-require-match="false", required)
+                                //transformChip($chip)
+                                //required,
+                                md-autocomplete(
+                                md-autocomplete-snap, 
+                                md-items="item in querySearch(searchText, 'cat')", 
+                                md-item-text="item",
+                                md-search-text="searchText",
+                                placeholder="American/Curry...")
+
+                                  md-item-template
+                                    span(md-highlight-text="searchText")
+                                    strong {{item}}
+
+                                md-chip-template
+                                  span
+                                    strong {{$chip}} 
+                              div(ng-messages="newRestaurant.cuisine.$error")
+                                div(ng-message="required") This field is required                                 
+
+                      //chips showing all contents of new restaurant ocassion  ng-model= "newRestaurant.occasion",
+                      //md-chips(ng-model="newRestaurant.occasion", md-removable="true",
+                      //md-transform-chip="undefined", md-require-match="false")
                         //- transformChip($chip)
                         md-autocomplete(
                         md-autocomplete-snap, 
@@ -336,29 +439,55 @@ html(ng-app="eaHelper")
                           md-chip-template
                             span
                               strong {{$chip}}   
-                  tr
-                    td Your Review:*
-                    td
-                      .input-group#enter-review
-                        input(type="text", class="form-control", placeholder="Review", aria-describedby="Restaurant Address" ng-model="newRestaurantReview")                
-                  tr
-                    td Your Rating:*         
-                    td#ratingSliderContainer 
-                      br
-                      rzslider#ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
-                      label#ratingOpinion No Opinion
+
+                      //.input-group#enter-review
+                        input(type="text", class="form-control", placeholder="Review", aria-describedby="Restaurant Address" ng-model="newRestaurantReview", required, min-length)                
+
+                      //div(layout="row", layout-wrap).legendpadding
+                        div(flex="50", layout="column").mdinputpadding
+                          |Review
+                        div(flex="50", layout="column").mdinputpadding
+                          |Rating
+                        legend
+                      br 
+                      br 
+                      div(layout="row", layout-wrap).legendpadding
+                        | Your Review and Rating
+                        legend
+
+                      div(layout="row", layout-wrap)
+                        div(flex="100", flex-gt-sm="50", layout="column")                                                
+                              md-input-container.md-block
+                                label Your Restaurant Review
+                                //ng-pattern="/^.+@.+\..+$/"
+                                input(required, type="text", name="review", ng-model="newRestaurant.review", minlength="5", maxlength="200")
+                                div(ng-messages="newRestaurant.review.$error", role="alert")
+                                  div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                    //, 'pattern'
+                                    | The restaurant review must be between 5 and 200 characters long.
+                          
+                        div(flex="100", flex-gt-sm="50", layout="column")
+                                 
+                              div#ratingSliderContainer
+                                br
+                                rzslider#ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
+                      //label#ratingOpinion No Opinion
                           input(type="checkbox", ng-model="restaurantRatingSlider.options.disabled")
 
-                  tr
-                    td
-                    td
                       // || newRestaurant.price==null restaurantSubmissionForm.name.$invalid  restaurantSubmissionForm.name.$minLength|| restaurantSubmissionForm.price.$error.required , ng-disabled="restaurantSubmissionForm.$invalid "
                       //restaurantSubmissionForm.$invalid not functional due to angular materials fault
-                      button.btn.btn-primary#mainSubmit(ng-click="submitRestaurant()", name="submitFormBtn",  ng-disabled="restaurantSubmissionForm.address.$invalid || restaurantSubmissionForm.name.$invalid")
-                        |Submit  
-                      | {{chosenRestaurantSubmitResult}}
-                      
+                      //restaurantSubmissionForm.address.$invalid || restaurantSubmissionForm.name.$invalid || restaurantSubmissionForm.website.$invalid || restaurantSubmissionForm.phone.$invalid
+                      div(flex="100", layout="column", style="position:relative")
+                        //button.btn.btn-primary#mainSubmit(ng-click="submitRestaurant()", name="submitFormBtn",  
+                        //ng-disabled="restaurantSubmissionForm.address.$invalid || restaurantSubmissionForm.name.$invalid || restaurantSubmissionForm.website.$invalid || restaurantSubmissionForm.phone.$invalid || restaurantSubmissionForm.area.$invalid")
+                          |Submit  
+                        div
+                          md-button(type="submit", ng-disabled="restaurantSubmissionForm.$invalid || newRestaurant.cuisine.length==0 || newRestaurant.occasion.length==0")#mainSubmit
+                            | Submit
+                        | {{chosenRestaurantSubmitResult}}
+                        
           div#restaurantPopUp
+            div#topborder
             div#btns
               span#infoBtn Info
               span#reviewsBtn Reviews
@@ -387,79 +516,138 @@ html(ng-app="eaHelper")
                     span(ng-if="chosenRestaurant.website == '-'") {{chosenRestaurant.website}}
                     span(ng-if="chosenRestaurant.website != '-'")
                       a( href='https://www.{{chosenRestaurant.website}}') https://www.{{chosenRestaurant.website }}
-                    
+                tr 
+                  td Phone Number:
+                  td 
+                    {{chosenRestaurant.phone}}
+                     
                 tr 
                   td Price:
                   td {{chosenRestaurant.price}}  
             //Edit options for chosen restaurant         
             div#restaurantEdit
               form#restaurantEditForm(name="restaurantEditForm")
-                table
-                  tr
-                    td Address:
-                    td 
-                      input(type="text",  ng-model="editRestaurant.address", name="address", required, min-length)
-                  tr 
-                    td Cuisine:
-                    td
-                      md-chips(ng-model="editRestaurant.cuisine", md-removable="true",
-                      md-transform-chip="undefined", md-require-match="false")
-                        //- transformChip($chip)
-                        md-autocomplete(
-                        md-autocomplete-snap, 
-                        md-items="item in querySearch(searchText, 'cat')", 
-                        md-item-text="item",
-                        md-search-text="searchText",
-                        placeholder="American/Curry...")
-                          md-item-template
-                            span(md-highlight-text="searchText")
-                            {{item}}
-                        md-chip-template
-                          span
-                            {{$chip}}                    
-                  tr
-                    td Outdoor Seating:
-                    td
-                      div.btn-group(data-toggle="buttons")
-                        label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="editRestaurant.outdoorSeating=opt")
-                          input(type="radio",id="{{opt}}", ng-value="'{{opt}}'", name="price")
-                          | {{opt}} 
-                  tr 
-                    td Occasions:
-                    td
-                      //chips showing all contents of new restaurant ocassion
-                      md-chips(ng-model="editRestaurant.occasion", md-removable="true",
-                      md-transform-chip="undefined", md-require-match="false")
-                        //- transformChip($chip)
-                        md-autocomplete(
-                        md-autocomplete-snap, 
-                        md-items="item in querySearch(searchText, 'occ')", 
-                        md-item-text="item",
-                        md-search-text="searchText",
-                        placeholder="Lunch/Dinner...")
-                          md-item-template
-                            span(md-highlight-text="searchText")
-                            {{item}}
-                        md-chip-template
-                          span
-                            {{$chip}}                                           
-                  tr 
-                    td Website:
-                    td 
-                      input(type="text",  ng-model="editRestaurant.website")
-                  tr 
-                    td Price:
-                    td
-                      div.btn-group(data-toggle="buttons")
-                        label.btn.btn-primary(ng-repeat="opt in priceOptions", ng-click="editRestaurant.price=opt")
-                          input(type="radio",id="{{opt}}", ng-value="'{{opt}}'", name="price")
-                          | {{opt}} 
+                   
+                          md-input-container.md-block
+                            label Restaurant Address
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="address", ng-model="editRestaurant.address", minlength="5", maxlength="80")
+                            div(ng-messages="editRestaurant.address.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant address must be between 5 and 80 characters long.
+                          //input(type="text",  ng-model="editRestaurant.address", name="address", required, min-length)
 
-                  tr 
-                    td
-                    td
-                      button.btn.btn-primary#mainEditSubmit(ng-click="editSubmitRestaurant()",  ng-disabled="restaurantEditForm.address.$invalid || restaurantEditForm.name.$invalid")
-                        |Submit  
+                          md-input-container.md-block
+                            label Restaurant Website
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="website", ng-model="editRestaurant.website", minlength="5", maxlength="50")
+                            div(ng-messages="editRestaurant.website.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant website must be between 5 and 50 characters long.
+                        
+
+                          md-input-container.md-block
+                            label Restaurant Phone Number
+                            //ng-pattern="/^.+@.+\..+$/"
+                            input(required, type="text", name="phone", ng-model="editRestaurant.phone", minlength="11", maxlength="13")
+                            div(ng-messages="editRestaurant.phone.$error", role="alert")
+                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                //, 'pattern'
+                                | The restaurant phone number must be 11 numbers long.
+                            //input(type="text",  ng-model="editRestaurant.phone")
+                     
+
+                          md-chips(ng-model="editRestaurant.cuisine", md-removable="true",
+                          md-transform-chip="undefined", md-require-match="false")
+                            //- transformChip($chip)
+                            md-autocomplete(
+                            md-autocomplete-snap, 
+                            md-items="item in querySearch(searchText, 'cat')", 
+                            md-item-text="item",
+                            md-search-text="searchText",
+                            placeholder="American/Curry...")
+                              md-item-template
+                                span(md-highlight-text="searchText")
+                                {{item}}
+                            md-chip-template
+                              span
+                                {{$chip}}                    
+                          
+                          md-input-container(name="outdoor", class="md-block")
+                            label Outdoor Seating
+                            md-select( ng-model="editRestaurant.outdoorSeating", required)
+                              md-option(ng-repeat="item in outdoorSeatingOptions", ng-value="'{{item}}'")
+                                {{ item}}  
+              
+
+                              //div.btn-group(data-toggle="buttons", id="outdoorSelect")
+                                label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="newRestaurant.outdoorSeating=opt")
+                                  input(type="radio", ng-model="newRestaurant.outdoorSeating", id="{{opt}}",  ng-value="'{{opt}}'",  name="outdoor", required)
+                                  | {{opt}}
+
+                            //div(flex="100", flex-gt-sm="33", layout="column") 
+                              md-input-container(name="outdoor", class="md-block", flex-gt-sm).droppy
+                                label Outdoor Seating
+                                md-select( ng-model="newRestaurant.outdoorSeating", required)
+                                  md-option(ng-repeat="item in outdoorSeatingOptions", ng-value="'{{item}}'")
+                                    {{ item}}  
+
+
+
+                            //div.btn-group(data-toggle="buttons")
+                              label.btn.btn-primary(ng-repeat="opt in outdoorSeatingOptions", ng-click="editRestaurant.outdoorSeating=opt")
+                                input(type="radio",id="{{opt}}", ng-value="'{{opt}}'", name="price")
+                                | {{opt}} 
+
+                            fieldset.standard
+                                //legend Occasions
+                                div(layout="row", layout-wrap, flex)
+                                  div( flex="50", ng-repeat="item in occasionOptions")
+                                    md-checkbox( class="md-secondary",  ng-checked="exists(item.name, editRestaurant.occasion)", ng-click="toggle(item.name, editRestaurant.occasion)")
+                                    // ,  ng-checked="exists(item, editRestaurant.occasion)"
+                                    {{ item.name }} 
+                                    //{{editRestaurantOccasion[item.name]}}
+                                    //ng-model="editRestaurantOccasion[item.name]",
+                                  div(ng-messages="editRestaurant.occasion.length==0")
+                                    div(ng-message="required") This field is required
+
+
+
+                          //chips showing all contents of new restaurant ocassion
+                          //md-chips(ng-model="editRestaurant.occasion", md-removable="true",md-transform-chip="undefined", md-require-match="false")
+                            //- transformChip($chip)
+                            md-autocomplete(
+                            md-autocomplete-snap, 
+                            md-items="item in querySearch(searchText, 'occ')", 
+                            md-item-text="item",
+                            md-search-text="searchText",
+                            placeholder="Lunch/Dinner...")
+                              md-item-template
+                                span(md-highlight-text="searchText")
+                                {{item}}
+                            md-chip-template
+                              span
+                                {{$chip}}                                           
+
+
+                          md-input-container(name="price", class="md-block", flex-gt-sm)
+                            label Price
+                            md-select( ng-model="editRestaurant.price", required)
+                              md-option(ng-repeat="item in priceOptions", ng-value="'{{item}}'")
+                                {{ item}}  
+           
+
+                          //div.btn-group(data-toggle="buttons")
+                            label.btn.btn-primary(ng-repeat="opt in priceOptions", ng-click="editRestaurant.price=opt")
+                              input(type="radio",id="{{opt}}", ng-value="'{{opt}}'", name="price")
+                              | {{opt}} 
+
+                md-button(type="submit",ng-click="editSubmitRestaurant()", ng-disabled="restaurantEditForm.$invalid || editRestaurant.cuisine.length==0 || editRestaurant.occasion.length==0")
+                  | Submit
+                  //button.btn.btn-primary#mainEditSubmit(ng-click="editSubmitRestaurant()",  ng-disabled="restaurantEditForm.address.$invalid || restaurantEditForm.name.$invalid")
+                    |Submit  
                 | {{chosenRestaurantEditSubmitResult}}
 
             div#reviews

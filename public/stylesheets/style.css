@@ -51,18 +51,40 @@ html, body{
         height:100vh;
         overflow:hidden;
         display: flex;
+        flex-flow: column;
+        flex-direction:column;
+        /*display: flex;
         flex-direction: column;
-        justify-content: center;
-        
+        justify-content: center;*/   
     }
+    #listFilters{
+        flex: 0 1 auto;
+    }
+    #filterscenter{
+        flex: 1 1 auto; 
+        overflow:hidden;
+        max-height:100%;
+        
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        /*justify-content:center;*/
+    }
+
+
     #innerfilters{
         width:100%;
-        max-height:100%;
         overflow-y:scroll;
         overflow-x:hidden;
         padding-bottom:0.5em;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: auto;
+
+
         /*padding-right: 19px;
         box-sizing: content-box;*/
+
         
     }
     #listItems #titleList{
@@ -112,15 +134,19 @@ a, a:hover, a:active{
 }
 
 #filters{
-    background-color:#3A4D9E;
+    /*background-color:#3A4D9E;*/
+    background-color:white;
+    color:black;
+    font-weight:bold;
 }
 
     .filter{
         padding: 2em 1em;
         width:100%;
         margin:0;
-        border-bottom: 1px solid #6A7DCE;
-        background-color:#3A4D9E;
+        /*border-bottom: 1px solid #6A7DCE;*/
+        background-color:white;
+        /*background-color:#3A4D9E;*/
         line-height:1em;
         position:relative;
         box-sizing:border-box;  
@@ -165,7 +191,9 @@ a, a:hover, a:active{
             background-color:#6A7DCE;
         }
         .checked{
-            background-color:#6A7DCE;
+            background-color:#3A4D9E;
+            color:white;
+            /*background-color:#6A7DCE;*/
         }   
             #filters .dropdown{
                 width:100%;
@@ -177,8 +205,12 @@ a, a:hover, a:active{
                 width:100%;
                 padding:1em 1em;
                 display:block;
-                background-color:#6A7DCE;
+                background-color:#3A4D9E;
+                color:white;
+                font-weight:normal;
+                /*background-color:#6A7DCE;
                 border-bottom: 1px solid #3A4D9E;
+                */
                 line-height:1em;
             }
         #filterslider{
@@ -233,28 +265,28 @@ a, a:hover, a:active{
                 width:1em;
                 height:1em;
                 top:-0.5em;
-                background-color:white;
+                background-color:#3A4D9E;
             }
                 #filterslider .rz-pointer:after{
                     width:0.5em;
                     height:0.5em;
                     top:0.25em;
                     left:0.25em;
-                    background-color:#6A7DCE;
+                    background-color:#3A4D9E;
                     display:none;
                 }
             #filterslider .rz-bar{
-                background:#6A7DCE;
-                height:1px;
+                background:#3A4D9E;
+                height:2px;
             }
             #filterslider .rz-bubble{
-                color:#6A7DCE;
+                color:black;
                 
             }
             #filterslider .rz-tick{
                 width:0.5em;
                 height:0.5em;
-                background-color:#6A7DCE;
+                background-color:#3A4D9E;
                 left:-0.55em;
                 
             }
@@ -331,7 +363,7 @@ a, a:hover, a:active{
         overflow-y:scroll;
         /*padding-right:10em;
         box-sizing:content-box;*/
-        padding: 2em 1em;
+        padding: 1em 1em;
         box-sizing:border-box;
         display:flex;
         flex-direction:row;
@@ -389,6 +421,7 @@ a, a:hover, a:active{
             padding-top:1em;
             padding-left:1em;
             padding-bottom:1em;
+            
         }
 
             #listItems #titleList span{
@@ -525,13 +558,13 @@ a, a:hover, a:active{
                 }
                
             #submit .rz-bar, #reviews .rz-bar{
-                background:#6A7DCE;
+                background:#3A4D9E;
                 height:2px;
             }
             #submit .rz-tick, #reviews .rz-tick{
                 width:0.5em;
                 height:0.5em;
-                background-color:#6A7DCE;
+                background-color:#3A4D9E;
                 left:-0.55em;
             }
             
@@ -539,8 +572,11 @@ a, a:hover, a:active{
                 color:#212121;
                 
             }
-           
-            #submit .rz-selection, #reviews .rz-selection{
+            #filters #price .rz-selection, #filters #rating .rz-selection{
+                background-color:#3A4D9E;
+                color:#3A4D9E;
+            }
+            #submit .rz-selection, #reviews .rz-selection {
                 color:#3A4D9E;
             }
                 #submit .rz-disabled .rz-selection {
@@ -570,10 +606,18 @@ a, a:hover, a:active{
     z-index:50;
     transition: 0.5s ease-out;
     max-height:75vh;
-    border-top:5px solid #3A4D9E;
+    
     display: flex;
     flex-direction: column;
 }
+    #restaurantPopUp #topborder{
+        width:100%;
+        position:absolute;
+        top:0;
+        height:5px;
+        left:0;
+        background-color:#3a3a3a;
+    }
     #restaurantPopUp #circle{
         height:4.2em;
         width:4.2em;
@@ -697,7 +741,8 @@ a, a:hover, a:active{
             #reviews tr:nth-child(odd),
             #submit tr:nth-child(odd),
             #listItems md-card:nth-child(odd){
-                background-color:rgba(106,125,206,0.2);
+               /* background-color:rgba(106,125,206,0.2);*/ 
+               
                 
             }
             
@@ -898,11 +943,11 @@ a, a:hover, a:active{
     border-color: #6A7DCE;
 }
 
-#enter-name input.ng-invalid,  #enter-address input.ng-invalid {
+.enter-detail input.ng-invalid {
     border-color: rgba(238,98,55,1);
     
 }
-#enter-name input.ng-valid, #enter-address input.ng-valid {
+.enter-detail input.ng-valid {
     border-color: rgba(124,184,68,1);
 }
 
@@ -919,5 +964,97 @@ a, a:hover, a:active{
 #restaurantEdit md-chips-wrap{
     margin:0;
     padding-left:0;
+}
+
+md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon {
+    background-color: #3A4D9E;
+}
+
+#submit md-input-container label{
+    width:100%;
+    padding: 0 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1em;
+    font-weight:normal;
+}
+
+#submit legend{
+    font-size: 1em;
+    font-weight:bold;
+    margin-bottom:0.5em;
+    border-bottom: 2px solid #3A4D9E;
+
+}
+
+#submit md-input-container, #submit .mdinputpadding {
+    display: inline-block;
+
+    padding: 5px 0.5em 0 0.5em;
+    margin: 1.5em 0 0 0;
+    width:100%;
+}
+#submit #ratingSliderContainer{
+    padding: 0 0.5em 0em 0.5em;
+}
+
+#submit .legendpadding{
+    padding: 0 0.5em;
+    font-weight:bold;
+    
+}
+#submit fieldset{
+    color:rgba(0,0,0,0.38);
+}
+
+md-checkbox.md-default-theme:not(.md-checked) .md-icon, md-checkbox:not(.md-checked) .md-icon {
+    border-color: rgba(0,0,0,0.38);
+}
+
+
+
+
+#submit .droppy label{
+    font-size: 1em;
+    font-weight:bold;    
+}
+#submit .droppy{
+    margin-bottom:2em;
+}
+
+
+
+#cuisineChoose{
+    width:50%;
+    display:inline-block;
+}
+
+#mainSubmit{
+    position:absolute;
+    right:0.5em;
+}
+
+/*
+.searchFilter md-input-container label, .searchFilter md-input-container md-select, .searchFilter md-input-container input{
+    color:white;
+}
+
+.searchFilter md-input-container .md-placeholder, .searchFilter md-input-container label:not(.md-no-float):not(.md-container-ignore) {
+    color:white;
+}
+.searchFilter .md-select-value>span:not(.md-select-icon) .md-text {
+    color:white;
+}
+
+.searchFilter .md-select-value .md-select-icon {
+    color:white;
+}
+*/
+.searchFilter{
+    padding-top:1em;
+    padding-bottom:0em;
+    
+}
+.searchFilter md-input-container{
+    margin-bottom:0;
 }
 
