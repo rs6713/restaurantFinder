@@ -209,24 +209,13 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.listOrder="name";
     $scope.listOrderOptions=[{name: "Name",code:"name", reverse: false},{name:"Price- lowest to highest", code:"price", reverse: false}, {name:"Rating- lowest to highest", code:"avgRating", reverse: false}, {name:"Rating- highest to lowest", code:"reverseAvgRating", reverse: true}];
 
-    $scope.chosenRestaurant={
-        address: "Unknown",
-        name:"Unknown",
-        cuisine: [],
-        outdoor: "Unknown",
-        occasion: [],
-        website: "Unknown",
-        reviews: [],
-        avgRating: 0,
-        phone: "Unknown",
-        rating:[]
-    };
+
 
     $scope.setOrder=function(name){
         $scope.listOrder=name;
     }
 
-    $scope.newRestaurant={
+    var defaultRest={
         address:"",
         area:"",
         name:"",
@@ -239,19 +228,10 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         website:"",
         phone:""
     };
-    $scope.editRestaurant={
-        address:"",
-        area:"",
-        name:"",
-        rating:[],
-        review:[],
-        cuisine:[],
-        occasion:[],
-        outdoorSeating:"",
-        price: "",
-        website:"",
-        phone:""
-    };
+
+    $scope.chosenRestaurant=defaultRest;
+    $scope.newRestaurant=defaultRest;
+    $scope.editRestaurant=defaultRest;
     //$scope.editRestaurantOccasion={};
     $scope.newRestaurantArea=[];
     $scope.newRestaurantReview="";
@@ -267,7 +247,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 }
     };
     $scope.restaurantReviewSlider={
-            value:1,
+            value:3,
             options:{
                 ceil:5,
                 floor:1,
@@ -278,7 +258,19 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     };
     $scope.newReview="";
 
-   
+    $scope.currentRestaurantView="Info"; //info, review, edit
+    $scope.editRestaurantFlag=true;
+    $scope.toggleBtn= function(pageType){
+        if(pageType=="Edit"){
+            console.log("goign to edit page", $scope.editRestaurantFlag);
+            $scope.editRestaurantFlag=false;
+        }else{
+            console.log("goign to info page",  $scope.editRestaurantFlag);
+            $scope.editRestaurantFlag=true;
+        }
+        
+    }
+
       $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
         if (idx > -1) {
@@ -287,13 +279,12 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         else {
           list.push(item);
         }
-        $scope.$apply();
       };
     $scope.exists = function (item, list) {
         return list.indexOf(item) > -1;
       };
 
-    var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating"];
+    var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating", "area", "phone"];
     $scope.priceOptions= ["£5-20", "£20-50", "£50+"];
     $scope.outdoorSeatingOptions=["Yes", "No"];
 
@@ -318,6 +309,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         console.log($scope.editRestaurant.occasion);
         console.log($scope.editRestaurantOccasion);
         */
+        console.log("Loading chosen into editRestaurant", $scope.editRestaurant );
     }
 
     //Handle marker click
@@ -328,19 +320,25 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
         for( var k in restQualities){
             var key= restQualities[k];
-            if(!restaurants[name].hasOwnProperty(key)){
+            //Value has not been set, dont add to chosenRestaurant information
+            if(!restaurants[name].hasOwnProperty(key) && key!="avgRating" ){
                 console.log("Restaurant does not have property", key);
                 continue;
             } 
 
             switch(key){
+                
                 case "address":
                 case "website":
                 case "price":
                 case "avgRating":
                 case "outdoorSeating":
-                    $scope.chosenRestaurant[key] = (restaurants[name][key]===null || restaurants[name][key]==="" || restaurants[name][key]===0) ? "-" : restaurants[name][key];
+                case "area":
+                case "phone":
+                    console.log("clickrestaurant", key, restaurants[name][key]);
+                    $scope.chosenRestaurant[key] = (!restaurants[name].hasOwnProperty(key) || restaurants[name][key]===null || restaurants[name][key]==="" || restaurants[name][key]===0) ? "-" : restaurants[name][key];
                     break;
+                    
                 case "occasion":
                 case "cuisine":
                     var propArray=[];
@@ -371,6 +369,14 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         console.log(name);
         console.log(restaurants[name]);
         console.log($scope.chosenRestaurant);
+        //Load up chosen restaurant information into restaurant info popup
+        $scope.editRestaurantFill();
+
+        //Clear previous submission messages
+        $scope.reviewSubmitResult="";
+        $scope.chosenRestaurantSubmitResult="";
+        $scope.chosenRestaurantEditSubmitResult="";
+
         $scope.$apply() ;
     };
 
@@ -392,7 +398,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             $scope.deleteResult="Restaurant successfully removed"; 
         }).error(function(error,status){
             console.log(error);    
-            $scope.reviewSubmitResult="Restaurant not removed."
+            $scope.deleteResult="Restaurant not removed."
         });        
         
 
@@ -404,13 +410,13 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 //|| $scope.restaurantSubmissionForm.price.$error.required || $scope.restaurantSubmissionForm.outdoor.$error.required
 
    
-    
+    //Submit restaurant review, add review info to chosenrestaurant
+    //Then send new form to be added to database
     $scope.submitRestaurantReview=function(){
         if(restaurantReviewForm.review.$invalid){
             $scope.reviewSubmitResult="Review information not complete."
         }else{
             $scope.chosenRestaurant.review.push($scope.newReview);
-            console.log($scope.chosenRestaurant);
 
             $scope.chosenRestaurant.rating.push($scope.restaurantReviewSlider.value);
             //avgRating should never be passed to database, this is just for other side of edit before filter change refreshes data access
@@ -421,15 +427,18 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             $scope.avgRatingPercent=Math.round(am);
             //document.getElementById('circlePercent').css({"background-image": "linear-gradient(-90deg, transparent 50%, #6A7DCE 50%),linear-gradient("+270-$scope.chosenRestaurant.avgRating/5*360+"deg, #6A7DCE 50%, transparent 50%)"}); 
             
-            console.log("changing circle percent", $scope.chosenRestaurant.avgRating);
-            console.log("Changing circle display percent", $scope.avgRatingPercent);
+            //console.log("changing circle percent", $scope.chosenRestaurant.avgRating);
+            //console.log("Changing circle display percent", $scope.avgRatingPercent);
             editRest.sendData($scope.chosenRestaurant).success(function(data){
                 $scope.reviewSubmitResult="Reviews successfully added to restaurant information.";
                 restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
                 restaurantReviewForm.reset();
+                $scope.restaurantReviewSlider.value=3;
             }).error(function(error,status){
                 console.log(error);
                 $scope.chosenRestaurant.avgRating=oldRating;
+                $scope.chosenRestaurat.review.pop();
+                $scope.chosenRestaurat.rating.pop();
                 $scope.reviewSubmitResult="Reviews not successfully added to restaurant information."
 
             });
@@ -443,18 +452,25 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             
             //$mdChipsCtrl.items=[];
             //mdChips remain as $chip in $mdChipsCtrl.items no way to know actual variable name
-            $scope.newRestaurant.area=$scope.newRestaurantArea[0];
+           // $scope.newRestaurant.area=$scope.newRestaurantArea;
             $scope.newRestaurant.rating=[];
             $scope.newRestaurant.review=[];
-            if($scope.newRestaurantReview!=="") $scope.newRestaurant.review.push($scope.newRestaurantReview);
-            if(!$scope.restaurantRatingSlider.options.disabled) $scope.newRestaurant.rating.push($scope.restaurantRatingSlider.value);
+            $scope.newRestaurant.review.push($scope.newRestaurantReview);
+            //if($scope.newRestaurantReview!=="") 
+            //if(!$scope.restaurantRatingSlider.options.disabled) 
+            $scope.newRestaurant.rating.push($scope.restaurantRatingSlider.value);
             
-            var newRest= $scope.newRestaurant;
+            //Changing to newRest, chosenRestaurant needs to remain with form selector valid price
+            var newRest= JSON.parse(JSON.stringify($scope.newRestaurant));
             var priceAct={"£5-20": "£", "£20-50":"££", "£50+": "£££"};
-            newRest.price= priceAct[newRest.price];
+            newRest.price= priceAct[$scope.newRestaurant.price];
 
-            submitRest.sendData($scope.newRestaurant).success(function(data){
+
+            submitRest.sendData(newRest).success(function(data){
                 $scope.chosenRestaurantSubmitResult="Restaurant information successfully added."
+                restaurants[$scope.newRestaurant.name]=newRest;
+                $scope.newRestaurant=defaultRest;
+                $scope.restaurantRatingSlider.value=3;
             }).error(function(error, status){
                 console.log(error);
                 $scope.chosenRestaurantSubmitResult="Restaurant information not added due to internal error."
@@ -466,7 +482,6 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             });
             */
         }
-
     }
     $scope.editSubmitRestaurant=function(){
         console.log("the edit restaurant information is", $scope.editRestaurant);
