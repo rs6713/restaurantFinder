@@ -1,19 +1,12 @@
 var mainApplicationModuleName= 'eaHelper';
-
 var mainApp= angular.module(mainApplicationModuleName, ['rzModule', 'ui.bootstrap', 'ngMaterial', 'ngMessages']);
 
-//bind function to document, so every time document.ready hit, 
-//using bootstrap, starts new angular application
-/*
-angular.element(document).ready(function(){
-    angular.bootstrap(document,
-    [mainApp]);
-});
-*/
-// Service
-// Object whose API is determined by the developer
 
-//Get distinct areas and food categories in database
+/***********Services/Factories*********************************
+// Object whose API is determined by the developer
+****************************************************************/
+
+//Get distinct areas and food categories, occasions in database
 //All get sent to same express route, url determines distinct property collected
 mainApp.factory('areaOptions', ['$http', function($http){
     return $http.get('/area');
@@ -21,18 +14,15 @@ mainApp.factory('areaOptions', ['$http', function($http){
 mainApp.factory('catOptions', ['$http', function($http){
     return $http.get('/cuisine');
 }]);
-
 mainApp.factory('occasionOptions', ['$http', function($http){
     return $http.get('/occasion');
 }]);
 
-//Factory function to get latitude, longitude
+//Factory function to get latitude, longitude using address
 mainApp.factory('googleURL', ['$http',  function($http){
     var googleLat={};
     googleLat.getLatLng=function(urlG){
-
-       return $http.get(urlG);
-       
+       return $http.get(urlG);  
     }
     return googleLat;
 }]);
@@ -41,8 +31,7 @@ mainApp.factory('googleURL', ['$http',  function($http){
 mainApp.factory('submitRest', ['$http',  function($http){
     var newRes={};
     newRes.sendData=function(rest){
-        return $http.post('/submitRestaurant',{data:rest});
-             
+        return $http.post('/submitRestaurant',{data:rest});       
     }
     return newRes;
 }]);
@@ -52,18 +41,16 @@ mainApp.factory('submitRest', ['$http',  function($http){
 mainApp.factory('editRest', ['$http',  function($http){
     var editRes={};
     editRes.sendData=function(rest){
-        return $http.post('/editRestaurant',{data:rest});
-             
+        return $http.post('/editRestaurant',{data:rest});     
     }
     return editRes;
 }]);
 
-//Factory function used to edit restaurant data on database
+//Factory function used to delete restaurant data on database via name
 mainApp.factory('deleteRest', ['$http',  function($http){
     var deleteRes={};
     deleteRes.deleteData=function(rest){
-        return $http.post('/deleteRestaurant',{data:rest});
-             
+        return $http.post('/deleteRestaurant',{data:rest});         
     }
     return deleteRes;
 }]);
@@ -72,33 +59,35 @@ mainApp.factory('deleteRest', ['$http',  function($http){
 mainApp.factory('reviewRest', ['$http',  function($http){
     var reviewRes={};
     reviewRes.sendData=function(rest){
-        return $http.post('/reviewRestaurant',{data:rest});
-             
+        return $http.post('/reviewRestaurant',{data:rest});     
     }
     return reviewRes;
 }]);
 
-//Get all matching restaurants
+//Get all matching restaurants to current filter settings
 mainApp.factory('restaurantsAvail', ['$http', function($http){
     var restaurants={};
     restaurants.getRestaurants=function(restProperties){
-        console.log(restProperties);
         return $http({
-                url:'/restaurantsAvail',
-                method:'GET',
-                params: {props:restProperties}
-            });
+            url:'/restaurantsAvail',
+            method:'GET',
+            params: {props:restProperties}
+        });
     }
-    return restaurants;
-    
+    return restaurants;    
 }]);
 
-/****************Custom Directives**************************************************/
+/****************Custom Directives*************************************************
 //return object, specify require ngModel (ngModelController)
 //make linking function mCtrl is ngModelController
 //specify validation function, takes input value as input
 //set validity of model controller to either true/false
 //ass myValidation funct to array, executed every time value changes
+********************************************************************************/
+
+//Validation Functions *****************************
+
+//Check length of form entry is greater than 2
 mainApp.directive("minLength", function(){
     return {
         require:"ngModel",
@@ -115,13 +104,14 @@ mainApp.directive("minLength", function(){
         }
     };
 });
+
 //Phone numbers are 11 numbers long
+//Trims non whitespace
 mainApp.directive("phoneLength", function(){
     return {
         require:"ngModel",
         link: function(scope, element, attr, mCtrl){
             function myValidation(value){
-                console.log(value);
                 var trimVal= value.replace(/\s/g,'');
                 if(  trimVal.length!=11){
                     mCtrl.$setValidity('lengthName', false);
@@ -135,29 +125,27 @@ mainApp.directive("phoneLength", function(){
     };
 });
 
+//Sets the circle percentage of the rating display in popup restaurant info
 mainApp.directive('backImg', function(){
     return function(scope, element, attrs){
         attrs.$observe('backImg', function(value) {
-            
             if(value<=180){
                 value=value-90;
                 element.css({
                     'background-image': 'linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
-                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
                 });
             }else{
-                console.log("value is", value);
                 value=value-270;
-                console.log("value is", value);
                 element.css({
                     'background-image': 'linear-gradient('+value+'deg, #3A4D9E 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
-                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
                 });
             }
         });
     };
 });
 
+
+//Sets the circle percentage of the rating display in restaurant lists info
 mainApp.directive('backImglist', function(){
     return function(scope, element, attrs){
         attrs.$observe('backImglist', function(value) {
@@ -166,27 +154,22 @@ mainApp.directive('backImglist', function(){
                 value=value-90;
                 element.css({
                     'background-image': 'linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
-                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
                 });
             }else{
-                console.log("value is", value);
                 value=value-270;
-                console.log("value is", value);
                 element.css({
                     'background-image': 'linear-gradient('+value+'deg, #3A4D9E 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
-                    //'background-image': 'linear-gradient(0deg,  #6A7DCE 50%, transparent 50%) ,linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%)'
                 });
             }
         });
     };
 });
 
-
+//Return exponential of scope
 mainApp.directive('labelStyle', function($interpolate){
     return function(scope, elem){
         var   exp=$interpolate(elem.html()),
               watchFunc= function(){ return exp(scope);};
-
         scope.$watch(watchFunc, function(html){
             elem.html(html);
         });
@@ -197,6 +180,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     var self=this;
     self.readonly=true;
     self.removeable=true;
+
     var restaurants=[];
     $scope.searchText="";
     $scope.catOptions=[];
@@ -205,16 +189,24 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.restaurantList=[];
     $scope.restaurantListReduce=[];
     $scope.searchListText="";
+    
+    $scope.chosenRestaurantEditSubmitResult="";
+    $scope.chosenRestaurantSubmitResult="";
+
+    var initializing = true;
 
     $scope.listOrder="name";
     $scope.listOrderOptions=[{name: "Name",code:"name", reverse: false},{name:"Price- lowest to highest", code:"price", reverse: false}, {name:"Rating- lowest to highest", code:"avgRating", reverse: false}, {name:"Rating- highest to lowest", code:"reverseAvgRating", reverse: true}];
 
+    $scope.newReview="";
+    $scope.currentRestaurantView="Info"; //info, review, edit
+    $scope.editRestaurantFlag=true;
 
+    var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating", "area", "phone"];
+    $scope.priceOptions= ["£5-20", "£20-50", "£50+"];
+    $scope.outdoorSeatingOptions=["Yes", "No"];
 
-    $scope.setOrder=function(name){
-        $scope.listOrder=name;
-    }
-
+    //Default representation for a restaurant
     var defaultRest={
         address:"",
         area:"",
@@ -228,50 +220,46 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         website:"",
         phone:""
     };
-
     $scope.chosenRestaurant=defaultRest;
     $scope.newRestaurant=defaultRest;
     $scope.editRestaurant=defaultRest;
-    //$scope.editRestaurantOccasion={};
+
     $scope.newRestaurantArea=[];
     $scope.newRestaurantReview="";
     $scope.restaurantRatingSlider={
-            value:3,
-            options:{
-                ceil:5,
-                floor:1,
-                //disabled:true,
-                showSelectionBar: true,
-                showTicks:true,
-                getSelectionBarColor: function(val){ return "#3A4D9E"}
-                }
+        value:3,
+        options:{
+            ceil:5,
+            floor:1,
+            showSelectionBar: true,
+            showTicks:true,
+            getSelectionBarColor: function(val){ return "#3A4D9E"}   
+        }
     };
     $scope.restaurantReviewSlider={
-            value:3,
-            options:{
-                ceil:5,
-                floor:1,
-                showSelectionBar: true,
-                showTicks:true,
-                getSelectionBarColor: function(val){ return "#3A4D9E"}
-                }
+        value:3,
+        options:{
+            ceil:5,
+            floor:1,
+            showSelectionBar: true,
+            showTicks:true,
+            getSelectionBarColor: function(val){ return "#3A4D9E"}
+        }
     };
-    $scope.newReview="";
 
-    $scope.currentRestaurantView="Info"; //info, review, edit
-    $scope.editRestaurantFlag=true;
+
+
+    //Controls navigation between edit and info page popup
     $scope.toggleBtn= function(pageType){
         if(pageType=="Edit"){
-            console.log("goign to edit page", $scope.editRestaurantFlag);
             $scope.editRestaurantFlag=false;
         }else{
-            console.log("goign to info page",  $scope.editRestaurantFlag);
             $scope.editRestaurantFlag=true;
-        }
-        
+        }  
     }
 
-      $scope.toggle = function (item, list) {
+    //Toggle item into/out of list
+    $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
         if (idx > -1) {
           list.splice(idx, 1);
@@ -279,16 +267,13 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         else {
           list.push(item);
         }
-      };
+    };
+    //Does item exist in list?
     $scope.exists = function (item, list) {
         return list.indexOf(item) > -1;
-      };
+    };
 
-    var restQualities=["address", "name", "occasion", "cuisine", "outdoorSeating", "website", "review", "avgRating", "price", "rating", "area", "phone"];
-    $scope.priceOptions= ["£5-20", "£20-50", "£50+"];
-    $scope.outdoorSeatingOptions=["Yes", "No"];
-
-
+    //Clear map of markers
     var clearMap=function(){
         for(i=1; i<markerArray.length; i++){
             markerArray[i].setMap(null);
@@ -296,38 +281,20 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         markerArray=[markerArray[0]];
     }
 
-    //Handle transfer info from chosen restaurant to edit restaurant
-    $scope.editRestaurantFill=function(){
-        $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
-        /*
-        for(var i=0; i< $scope.occasionOptions.length;i++){
-            $scope.editRestaurantOccasion[$scope.occasionOptions[i].name]=false;
-        }
-        for( var i=0; i< $scope.editRestaurant.occasion.length; i++){
-            $scope.editRestaurantOccasion[$scope.editRestaurant.occasion[i]]=true;
-        }
-        console.log($scope.editRestaurant.occasion);
-        console.log($scope.editRestaurantOccasion);
-        */
-        console.log("Loading chosen into editRestaurant", $scope.editRestaurant );
-    }
-
-    //Handle marker click
-    //Changes chosen restaurant
+    //Handle click on restaurant map marker
+    //Changes chosen restaurant details, 
     $scope.clickRestaurant=function(){
         var name=$(this)[0].title;
         $scope.chosenRestaurant={};
 
+        //Set chosenRestaurant properties, with capitalization etc
         for( var k in restQualities){
             var key= restQualities[k];
-            //Value has not been set, dont add to chosenRestaurant information
+            //Key Value has not been set, dont add to chosenRestaurant information
             if(!restaurants[name].hasOwnProperty(key) && key!="avgRating" ){
-                console.log("Restaurant does not have property", key);
                 continue;
             } 
-
             switch(key){
-                
                 case "address":
                 case "website":
                 case "price":
@@ -335,7 +302,6 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 case "outdoorSeating":
                 case "area":
                 case "phone":
-                    console.log("clickrestaurant", key, restaurants[name][key]);
                     $scope.chosenRestaurant[key] = (!restaurants[name].hasOwnProperty(key) || restaurants[name][key]===null || restaurants[name][key]==="" || restaurants[name][key]===0) ? "-" : restaurants[name][key];
                     break;
                     
@@ -346,14 +312,12 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                         propArray.push(restaurants[name][key][prop].capitalize());
                     }
                     $scope.chosenRestaurant[key] = (propArray==null) ? [] : propArray;
-                    console.log("the array of", key, "is ", propArray);
                     break;
                 case "name":
                     $scope.chosenRestaurant[key] = restaurants[name][key].capitalize();
                     break;
                 default:
                     $scope.chosenRestaurant[key] = restaurants[name][key];
-                
             }
             if($scope.chosenRestaurant.avgRating!="-"){
                 var am=Math.round($scope.chosenRestaurant.avgRating/5*360);
@@ -364,15 +328,10 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         }
         
         //Handle the processing of the gathered info from the db
-        
-        
-        console.log(name);
-        console.log(restaurants[name]);
-        console.log($scope.chosenRestaurant);
         //Load up chosen restaurant information into restaurant info popup
-        $scope.editRestaurantFill();
+        $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
 
-        //Clear previous submission messages
+        //Clear previous submission messages 
         $scope.reviewSubmitResult="";
         $scope.chosenRestaurantSubmitResult="";
         $scope.chosenRestaurantEditSubmitResult="";
@@ -380,12 +339,13 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         $scope.$apply() ;
     };
 
-    //remove from databse, associative array used for markers, marker, restaurantList
+    //Remove from databse, associative array used for markers, marker, restaurantList
     $scope.removeItem=function(name){
         delete restaurants[name];
         $scope.restaurantList = $scope.restaurantList.filter(function( obj ) {
             return obj.name !== name;
         });
+        //Remove restaurant from map
         for(var i=0; i< markerArray.length; i++){
             if(markerArray[i].title==name){
                 markerArray[i].setMap(null);
@@ -393,23 +353,27 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 break;
             }
         }
-
+        //Remove restaurant from database
         deleteRest.deleteData(name).success(function(data){
             $scope.deleteResult="Restaurant successfully removed"; 
         }).error(function(error,status){
             console.log(error);    
             $scope.deleteResult="Restaurant not removed."
         });        
-        
-
     }
+
+    //When edit/review buttons clicked from list view
     $scope.changeChosenRestaurant=function(name){
         $scope.chosenRestaurant=restaurants[name];
-        $scope.editRestaurant=$scope.chosenRestaurant;
+        $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
     }
-//|| $scope.restaurantSubmissionForm.price.$error.required || $scope.restaurantSubmissionForm.outdoor.$error.required
+ 
 
-   
+    /**********************************************************
+        Handles submitting new restaurants, editing restaurant and adding reviews
+        Sending to database,  updating restaurants array
+     **************************************************************/
+ 
     //Submit restaurant review, add review info to chosenrestaurant
     //Then send new form to be added to database
     $scope.submitRestaurantReview=function(){
@@ -417,22 +381,23 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             $scope.reviewSubmitResult="Review information not complete."
         }else{
             $scope.chosenRestaurant.review.push($scope.newReview);
-
             $scope.chosenRestaurant.rating.push($scope.restaurantReviewSlider.value);
-            //avgRating should never be passed to database, this is just for other side of edit before filter change refreshes data access
+
+            //Save old rating values in case of error
             var noRatings= $scope.chosenRestaurant.rating.length;
             var oldRating=$scope.chosenRestaurant.avgRating;
+            //Change avg rating percent for rating dial
             $scope.chosenRestaurant.avgRating= $scope.chosenRestaurant.rating.reduce(function(a,b){return a+b;})/noRatings;
             var am=Math.round($scope.chosenRestaurant.avgRating/5*360);
             $scope.avgRatingPercent=Math.round(am);
-            //document.getElementById('circlePercent').css({"background-image": "linear-gradient(-90deg, transparent 50%, #6A7DCE 50%),linear-gradient("+270-$scope.chosenRestaurant.avgRating/5*360+"deg, #6A7DCE 50%, transparent 50%)"}); 
             
-            //console.log("changing circle percent", $scope.chosenRestaurant.avgRating);
-            //console.log("Changing circle display percent", $scope.avgRatingPercent);
+            //Send restaurant data with added reviews to database
+            //If successful load new chosen restaurant to array, clear form
+            //Else reload old raings 
             editRest.sendData($scope.chosenRestaurant).success(function(data){
                 $scope.reviewSubmitResult="Reviews successfully added to restaurant information.";
                 restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
-                restaurantReviewForm.reset();
+                newReview="";
                 $scope.restaurantReviewSlider.value=3;
             }).error(function(error,status){
                 console.log(error);
@@ -445,19 +410,16 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         }
     }
 
+    //Submit new restaurant to database
     $scope.submitRestaurant=function(){
+        //Should never occur due to front-end form handling
         if(restaurantSubmissionForm.address.$invalid || restaurantSubmissionForm.name.$invalid ){//!$scope.restaurantSubmissionForm.$valid
             $scope.chosenRestaurantSubmitResult="Restaurant information is not valid."
         }else{
             
-            //$mdChipsCtrl.items=[];
-            //mdChips remain as $chip in $mdChipsCtrl.items no way to know actual variable name
-           // $scope.newRestaurant.area=$scope.newRestaurantArea;
             $scope.newRestaurant.rating=[];
             $scope.newRestaurant.review=[];
             $scope.newRestaurant.review.push($scope.newRestaurantReview);
-            //if($scope.newRestaurantReview!=="") 
-            //if(!$scope.restaurantRatingSlider.options.disabled) 
             $scope.newRestaurant.rating.push($scope.restaurantRatingSlider.value);
             
             //Changing to newRest, chosenRestaurant needs to remain with form selector valid price
@@ -465,47 +427,40 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             var priceAct={"£5-20": "£", "£20-50":"££", "£50+": "£££"};
             newRest.price= priceAct[$scope.newRestaurant.price];
 
-
+            //Submit new restaurant, if successful, add newRest to restaurants, (even though might not meet criteria)
             submitRest.sendData(newRest).success(function(data){
                 $scope.chosenRestaurantSubmitResult="Restaurant information successfully added."
                 restaurants[$scope.newRestaurant.name]=newRest;
                 $scope.newRestaurant=defaultRest;
                 $scope.restaurantRatingSlider.value=3;
+                $scope.reduceRestaurantList();
             }).error(function(error, status){
                 console.log(error);
                 $scope.chosenRestaurantSubmitResult="Restaurant information not added due to internal error."
             });
-            //reset form
-            /*
-            restaurantSubmissionForm.reset(function(){
-                $scope.restaurantRatingSlider.options.disabled=true;
-            });
-            */
         }
     }
+
+    //Submit edit to pre-existing restaurant
     $scope.editSubmitRestaurant=function(){
-        console.log("the edit restaurant information is", $scope.editRestaurant);
+        //Should always be valid as pre-handled in front-end
         if(restaurantEditForm.address.$invalid ){
             $scope.chosenRestaurantEditSubmitResult="Restaurant information is not valid."
         }else{
+            //Successfully submit, then reduce restaurant list, in case changes whetehr restaurant eligible
             editRest.sendData($scope.editRestaurant).success(function(data){
-                //if(data!=="No documents found"){
-                    $scope.chosenRestaurantEditSubmitResult="Restaurant information successfully changed."
-                    $scope.chosenRestaurant=JSON.parse(JSON.stringify($scope.editRestaurant));
-                    restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
-                    $scope.reduceRestaurantList();
-                //}else{
-                //  $scope.chosenRestaurantEditSubmitResult="Restaurant information not successfully changed."   
-                //}
+                $scope.chosenRestaurantEditSubmitResult="Restaurant information successfully changed."
+                $scope.chosenRestaurant=JSON.parse(JSON.stringify($scope.editRestaurant));
+                restaurants[$scope.chosenRestaurant.name]=$scope.chosenRestaurant;
+                $scope.reduceRestaurantList();
             }).error(function(error, status){
                 console.log(error);
                 $scope.chosenRestaurantEditSubmitResult="Restaurant information not changed due to internal error."
             });
         }
     }
-    $scope.chosenRestaurantEditSubmitResult="";
-    $scope.chosenRestaurantSubmitResult="";
 
+    //Adds function to string prototype to capitalise word
     String.prototype.capitalize = function() {
         var arr= this.split(" ");
         for(var i=0; i<arr.length;i++){
@@ -514,33 +469,32 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         return arr.join(" ");
     }
 
-
+    //Add array of markers to map,
+    //Get restaurant name, convert address to lat, lng, add event listeners
     var addMarkers=function(markerAdd){   
             restaurants=[];
             var newestMark;
             for(var i=0; i<markerAdd.length;i++){
                 //add marker to list of restaurants
-                
                 restaurants[markerAdd[i].name]=markerAdd[i];
-                
                 //get address of marker
                 var location= markerAdd[i].address;
                 location=location.replace(/ /g, "+");
-                //console.log("the location searching is", location)
-                var call="https://maps.googleapis.com/maps/api/geocode/json?address="+location+"&key=AIzaSyADp-Jxh-mAwZfWqI8bGvF25t8glrMhpRk"
-                //console.log("marker", markerAdd[i])
+                var call="https://maps.googleapis.com/maps/api/geocode/json?address="+location+"&key=AIzaSyADp-Jxh-mAwZfWqI8bGvF25t8glrMhpRk";
                 googleURL.getLatLng(call).success((function(index,data){
-                    //console.log("The lat longitude calculated by Google is: ", data);
-                    //console.log("maker again",markerAdd[index]);
-                    var latlng=data.results[0].geometry.location;
-                    var marker= new google.maps.Marker({
-                        position: latlng,
-                        map: map,
-                        title: markerAdd[index].name
-                    });
-                    marker.addListener('click', $scope.clickRestaurant);
-                    marker.addListener('click', popUpRest);
-                    markerArray.push(marker);
+                    if(data.results.length>=1){
+                        var latlng=data.results[0].geometry.location;
+                        var marker= new google.maps.Marker({
+                            position: latlng,
+                            map: map,
+                            title: markerAdd[index].name
+                        });
+                        marker.addListener('click', $scope.clickRestaurant);
+                        marker.addListener('click', popUpRest);
+                        markerArray.push(marker);
+                    }else{
+                        console.log("No lat lngs found for address", location);
+                    }
                 }).bind(null,i)).error(function(data,status){
                     console.log(data, status);
                 });
@@ -548,17 +502,57 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     }
 
 
+
+
+    
+
+    /**********************************************************
+        Handles querysearch and filters lists: autocomplete dropdown/ restaurant list
+     **************************************************************/
+
+    //Filters list of restaurants by search bar
+    //restaurantListReduce is basis for list display page
     $scope.reduceRestaurantList=function(){
-        console.log("search text is", $scope.searchListText)
-        console.log("restaurants")
         if($scope.searchListText=="") $scope.restaurantListReduce=JSON.parse(JSON.stringify($scope.restaurantList));
         else $scope.restaurantListReduce=$scope.querySearch($scope.searchListText, "list");
-
     }
 
+    //Search for options for autocorrect 
+    //general purpose for categories, occasions, areas and restaurant list
+    $scope.querySearch=function(criteria, type) {
+        console.log(criteria);
+        console.log("CatOptions are:" , $scope.catOptions);
+        var categories;
+        if(!criteria) return [];
+        switch(type){
+            case 'cat':
+                categories= $scope.catOptions.filter(createFilterFor(criteria));
+                break;
+            case 'occ':
+                categories= $scope.occasionOptions.filter(createFilterFor(criteria));
+                break;
+            case 'area':
+                categories= $scope.areaOptions.filter(createFilterFor(criteria));
+                break;
+            case 'list':
+                categories= $scope.restaurantList.filter(createFilterFor(criteria));
+                return categories;
+        }
+        var reducedCriteria=categories.map(function(a){return a.name});
+        return criteria ? reducedCriteria : [];
+    }
+
+    //creates filter 
+    //function takes option, states whether query is in option
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+      return function filterFn(cuisine) {
+        return (cuisine.name.toLowerCase().indexOf(lowercaseQuery) != -1);
+      };
+    }
+
+    //Determines key value for ordering restaurants based  on listOrder.code
     $scope.returnOrderValue=function(card){
-        //console.log($scope.listOrder.code);
-        //console.log(card);
         switch($scope.listOrder.code){
             case "price":
                 if(card.price=="") return 10
@@ -569,66 +563,71 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                 return card.avgRating
             case "reverseAvgRating":
                 return -card.avgRating
-
         }
     }
-    
 
-    /**
-     * Search for contacts; use a random delay to simulate a remote call
-     */
-
-    $scope.querySearch=function(criteria, type) {
-        console.log(criteria);
-        console.log("CatOptions are:" , $scope.catOptions);
-        var categories;
-        if(!criteria) return [];
-        switch(type){
-            case 'cat':
-                categories= $scope.catOptions.filter(createFilterFor(criteria));
-                console.log("Matching food types are: ", categories);
-                break;
-            case 'occ':
-                categories= $scope.occasionOptions.filter(createFilterFor(criteria));
-                console.log("Matching occasion types are: ", categories);
-                break;
-            case 'area':
-                categories= $scope.areaOptions.filter(createFilterFor(criteria));
-                console.log("Matching area types are: ", categories);
-                break;
-            case 'list':
-                categories= $scope.restaurantList.filter(createFilterFor(criteria));
-                console.log("Matching list types are: ", categories);
-                return categories;
-        }
-        var reducedCriteria=categories.map(function(a){return a.name});
-        console.log("Reduced", reducedCriteria);
-
-        return criteria ? reducedCriteria : [];
-    }
-
-    function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
-
-      return function filterFn(cuisine) {
-        return (cuisine.name.toLowerCase().indexOf(lowercaseQuery) != -1);
-      };
-
-    }
+    //If chip is simply name, converts to suitable chip format
+    //For md-materials framework
     $scope.transformChip=function(chip){
-        console.log("Transforming chip");
-        console.log("chip is", chip);
         if(angular.isObject(chip)){return chip;}
         var res={name:chip};
-        console.log(res)
         return res;
     }
 
-
-
-
-    var initializing = true;
+    /********************************************
+     //Button to delete restaurants from restaurant list
+     ************************************************/
     
+    //Toast button positioning
+    var last = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    $scope.toastPosition = angular.extend({},last);
+
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
+    }
+
+    //Controls what is shown
+    $scope.showActionToast = function(name) {
+        var pinTo = $scope.getToastPosition();
+        var toast = $mdToast.simple()
+            .textContent('Are you sure you want to delete', name,'?')
+            .action('DELETE')
+            .highlightAction(true)
+            .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+            .position(pinTo);
+
+        //If toast is confimed call $scope.removeItem, removes restaurant
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                $scope.removeItem(name);
+            }
+        });
+    };
+
+
+    
+    /***********************************************************************
+     * Initializing filters:  dropdowns and price/ratings bars
+     ********************************************************************/
+
+    //area, food categories and occasions promises, that retrieve options from database
     areaOptions.success(function(data){
         $scope.areaOptions=[];
         for(var i=0; i< data.length;i++){
@@ -659,7 +658,8 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         $scope.occasionOptions=[];
     });
    
-    //Style and val of slider visible 
+   
+    //price and ratings slider
     $scope.prices_bar = {
         value: 0,
         options: {
@@ -678,30 +678,26 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             showSelectionBar: true,
             showTicks:true,
             getSelectionBarColor: function(val){ return "#3a4d9e"}
-            /* function(value) {
-                if (value <= 1)
-                    return 'red';
-                if (value <= 3)
-                    return 'orange';
-                if (value <= 4)
-                    return 'yellow';
-                return '#2AE02A';
-            }*/
         }
     };
-
+    //Default option is outdoor seating is dont care
     $scope.outdoor=false;
 
-    //Wait for filter changes, then change map display
+    /**********************************************************************
+    // Wait for filter changes, then change map display
+    // Requires re-fetching of restaurant list from database according to search functionality.
+    ************************************************************************/
     $scope.$watch('[catOptions, areaOptions, outdoor, prices_bar.value, ratings_bar.value, occasionOptions]', function(newValues, oldValues, $scope) {
-        console.log("values changing");
+        
+        //Needs to ensure not triggered by filter values initialising, options loaded from server
         if(newValues[1]==undefined || newValues[5]==undefined || newValues[0]==undefined){
-            console.log("Currently initializingm filter values are currently:", newValues);
+            console.log("Currently initializing filter values are currently:", newValues);
             $timeout(function(){
                 console.log("Initializing complete after 0.5 sec (guessed)");
                 initializing=false;
             },500);
         }else{
+            //default , then copy over changed filter values
             var options={
                 cats:[], 
                 areas:[],
@@ -714,9 +710,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             var cats=newValues[0];
             var areas=newValues[1];
             var occasions=newValues[5];
-            console.log('cats', newValues[0]);
-            console.log('areas' ,newValues[1]);
-            console.log('occasions', newValues[5]);
+
             for(var i=0; i<cats.length;i++){
                 if(cats[i].selected){
                     options.cats.push(cats[i].name);
@@ -736,7 +730,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             options.price=newValues[3];
             options.rating=newValues[4];
 
-            
+            //Get list of available restaurants given the user specified options
             restaurantsAvail.getRestaurants(options).success(function(data){
                 clearMap();
                 if(data!= "No documents found"){
@@ -745,7 +739,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                     $scope.reduceRestaurantList();
                     addMarkers(data);
                 }else{
-                    console.log(data);
+                    console.log("No documents found: ", data);
                 }
             }).error(function(data,status){
                 console.log("there was an error", data,status);  
@@ -753,58 +747,9 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         }
     },true);
 
-    //Handles toast delete button
-    var last = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
 
-    $scope.toastPosition = angular.extend({},last);
-
-    $scope.getToastPosition = function() {
-        sanitizePosition();
-
-        return Object.keys($scope.toastPosition)
-        .filter(function(pos) { return $scope.toastPosition[pos]; })
-        .join(' ');
-    };
-
-    function sanitizePosition() {
-        var current = $scope.toastPosition;
-
-        if ( current.bottom && last.top ) current.top = false;
-        if ( current.top && last.bottom ) current.bottom = false;
-        if ( current.right && last.left ) current.left = false;
-        if ( current.left && last.right ) current.right = false;
-
-        last = angular.extend({},current);
-    }
-
-    $scope.showActionToast = function(name) {
-        var pinTo = $scope.getToastPosition();
-        var toast = $mdToast.simple()
-            .textContent('Are you sure you want to delete', name,'?')
-            .action('DELETE')
-            .highlightAction(true)
-            .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-            .position(pinTo);
-
-        $mdToast.show(toast).then(function(response) {
-            if ( response == 'ok' ) {
-                $scope.removeItem(name);
-            }
-        });
-    };
 
 
 }]);
 
 
-/* Typically controller of form
-mainApp.controller('areaOptions', function($scope){
-    $scope.first=1;
-});
-
-*/
