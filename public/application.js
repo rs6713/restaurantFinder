@@ -364,6 +364,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
     //When edit/review buttons clicked from list view
     $scope.changeChosenRestaurant=function(name){
+        $scope.editRestaurantFlag=false;
         $scope.chosenRestaurant=restaurants[name];
         $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
     }
