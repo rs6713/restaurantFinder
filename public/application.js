@@ -336,6 +336,8 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
         $scope.chosenRestaurantSubmitResult="";
         $scope.chosenRestaurantEditSubmitResult="";
 
+        //Default entry is info
+        $scope.editRestaurantFlag=true;
         $scope.$apply() ;
     };
 
