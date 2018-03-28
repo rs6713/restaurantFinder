@@ -2,6 +2,10 @@ var mainApplicationModuleName= 'eaHelper';
 var mainApp= angular.module(mainApplicationModuleName, ['rzModule', 'ui.bootstrap', 'ngMaterial', 'ngMessages']);
 
 
+var baseColor= "#400095"; //#3A4D9E
+var highColor= "#8000c5";//6000B5
+
+
 /***********Services/Factories*********************************
 // Object whose API is determined by the developer
 ****************************************************************/
@@ -132,12 +136,12 @@ mainApp.directive('backImg', function(){
             if(value<=180){
                 value=value-90;
                 element.css({
-                    'background-image': 'linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    'background-image': 'linear-gradient('+value+'deg, '+ baseColor+' 50%, transparent 50%),linear-gradient(-90deg,'+baseColor+'  50%, transparent 50%)'
                 });
             }else{
                 value=value-270;
                 element.css({
-                    'background-image': 'linear-gradient('+value+'deg, #3A4D9E 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    'background-image': 'linear-gradient('+value+'deg, '+highColor+' 50%, transparent 50%),linear-gradient(-90deg, '+highColor+'  50%, transparent 50%)'
                 });
             }
         });
@@ -153,12 +157,12 @@ mainApp.directive('backImglist', function(){
             if(value<=180){
                 value=value-90;
                 element.css({
-                    'background-image': 'linear-gradient('+value+'deg, #6A7DCE 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    'background-image': 'linear-gradient('+value+'deg, '+baseColor+' 50%, transparent 50%),linear-gradient(-90deg, '+baseColor+'  50%, transparent 50%)'
                 });
             }else{
                 value=value-270;
                 element.css({
-                    'background-image': 'linear-gradient('+value+'deg, #3A4D9E 50%, transparent 50%),linear-gradient(-90deg, #3A4D9E  50%, transparent 50%)'
+                    'background-image': 'linear-gradient('+value+'deg,'+highColor+' 50%, transparent 50%),linear-gradient(-90deg, '+highColor+'  50%, transparent 50%)'
                 });
             }
         });
@@ -227,13 +231,13 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.newRestaurantArea=[];
     $scope.newRestaurantReview="";
     $scope.restaurantRatingSlider={
-        value:3,
+        value:1,
         options:{
             ceil:5,
             floor:1,
             showSelectionBar: true,
             showTicks:true,
-            getSelectionBarColor: function(val){ return "#3A4D9E"}   
+            getSelectionBarColor: function(val){ return basecolor}   
         }
     };
     $scope.restaurantReviewSlider={
@@ -243,7 +247,7 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             floor:1,
             showSelectionBar: true,
             showTicks:true,
-            getSelectionBarColor: function(val){ return "#3A4D9E"}
+            getSelectionBarColor: function(val){ return baseColor}
         }
     };
 
@@ -320,11 +324,12 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
                     $scope.chosenRestaurant[key] = restaurants[name][key];
             }
             if($scope.chosenRestaurant.avgRating!="-"){
-                var am=Math.round($scope.chosenRestaurant.avgRating/5*360);
+                var am=Math.round(($scope.chosenRestaurant.avgRating/5)*360);
                 $scope.avgRatingPercent=am;           
             }else{
                 $scope.avgRatingPercent=0;
             }
+
         }
         
         //Handle the processing of the gathered info from the db
@@ -368,6 +373,8 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
     $scope.changeChosenRestaurant=function(name){
         $scope.editRestaurantFlag=false;
         $scope.chosenRestaurant=restaurants[name];
+        var am=Math.round(($scope.chosenRestaurant.avgRating/5)*360);
+        $scope.avgRatingPercent=am;
         $scope.editRestaurant=JSON.parse(JSON.stringify($scope.chosenRestaurant));
     }
  
@@ -670,17 +677,19 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
             showSelectionBar: true,
             showTicks:true,
             getSelectionBarColor: function(value) {
-                return "#3A4D9E";
+                return baseColor;
             }
         }
     };
     
     $scope.ratings_bar = {
-        value: 5,
+        value: 1,
         options: {
+            floor:1,
+            ceil:5,
             showSelectionBar: true,
             showTicks:true,
-            getSelectionBarColor: function(val){ return "#3a4d9e"}
+            getSelectionBarColor: function(val){ return baseColor}
         }
     };
     //Default option is outdoor seating is dont care

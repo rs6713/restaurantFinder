@@ -4,6 +4,7 @@ var markerArray=[];
 var price="££";
 var rating=3;
 var nbc = {lat:  51.51610, lng: -0.12728};
+var baseColor2="#400095";
 
     //Initialises google map, with nbc icon at centre
     var initMap=function() {
@@ -48,15 +49,15 @@ var nbc = {lat:  51.51610, lng: -0.12728};
         //$('#restaurantPopUp').css({"min-height":h});
 
         $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"black"});
-        $("#reviewEdit").css({"background-color":"#3a4d9e"});
-        $("#editEdit").css({"color":"#3a4d9e"});     
+        $("#reviewEdit").css({"background-color":baseColor2});
+        $("#editEdit").css({"background-color":baseColor2});     
     }
 
     //Handles popup of  restaurant from list
     var popRestList=function(popType){
-        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"#3a4d9e"});
-        $("#reviewEdit").css({"background-color":"#3a4d9e"});
-        $("#editEdit").css({"color":"#3a4d9e"});
+        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":baseColor2});
+        $("#reviewEdit").css({"background-color":baseColor2});
+        $("#editEdit").css({"background-color":baseColor2});
 
         $("#restaurantEdit").css({"display":"none"});
         $("#reviews").css({"display":"none"});
@@ -66,10 +67,10 @@ var nbc = {lat:  51.51610, lng: -0.12728};
         switch(popType){
             case "info":
                 $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"black"});
-                $("#restaurantInfo").css({"display":"block"});
+                $("#restaurantEdit").css({"display":"block"});
                 break;
             case "edit":   
-                $("#editEdit").css({"color":"black"});
+                $("#editEdit").css({"background-color":"black"});
                 $("#restaurantEdit").css({"display":"block"});
                 break;
             case "review":
@@ -101,7 +102,7 @@ $(window).resize(function(){
 $(document).ready(function(){ 
 
     //On initialisation, the map is in view
-    $('#map-view').css({"background-color":"#4a4a4a" , "border-top": "3px solid black"});
+    $('#map-view').css({"background-color":"#200064" , "border-top": "3px solid black"});
 
     //Make restaurant list filters e.g. search, order by, invisible
     $('#listFilters').css({"display":"none"});
@@ -119,23 +120,23 @@ $(document).ready(function(){
 
     //Change button color
     $("#editEdit").click(function(){
-        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"#3a4d9e"});
-        $("#reviewEdit").css({"background-color":"#3a4d9e"});
-        $("#editEdit").css({"color":"black"});
+        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":baseColor2});
+        $("#reviewEdit").css({"background-color":baseColor2});
+        $("#editEdit").css({"background-color":"black"});
     });
     $("#restaurantPopUp #popHeader #infoEdit").click(function(){
         $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"black"});
-        $("#reviewEdit").css({"background-color":"#3a4d9e"});
-        $("#editEdit").css({"color":"#3a4d9e"});        
+        $("#reviewEdit").css({"background-color":baseColor2});
+        $("#editEdit").css({"background-color":baseColor2});        
     });
     $("#reviewEdit").click(function(){
-        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":"#3a4d9e"});
+        $("#restaurantPopUp #popHeader #infoEdit").css({"background-color":baseColor2});
         $("#reviewEdit").css({"background-color":"black"});
-        $("#editEdit").css({"color":"#3a4d9e"});
+        $("#editEdit").css({"background-color":baseColor2});
     });
 
     //Change forms/information visible
-    $("#restaurantPopUp #popHeader i, #restaurantPopUp #popHeader #infoEdit").click(function(){
+    $("#restaurantPopUp #popHeader #editEdit, #restaurantPopUp #popHeader #infoEdit").click(function(){
         $('#restaurantEdit').css({"display":"block"});
         $("#reviews").css({"display":"none"});
     });
@@ -169,18 +170,18 @@ $(document).ready(function(){
         $("#list").css({"display":"none"});
         $("#submitContainer").css({"display":"none"});
         $('#listFilters').css({"display":"none"});
-        $('#map-view').css({"background-color":"#4a4a4a" , "border-top": "3px solid black" });
-        $('#list-view').css({"color":"white", "background-color":"#212121" , "border-top":"none"});
-        $('#add-view').css({"color":"white", "background-color":"#212121" , "border-top":"none"});
+        $('#map-view').css({"background-color":"#200064" , "border-top": "3px solid black" });
+        $('#list-view').css({"color":"white", "background-color":"#400095" , "border-top":"none"});
+        $('#add-view').css({"color":"white", "background-color":"#400095", "border-top":"none"});
     });
     $('#add-view').click(function(){
         $("#map").css({"display":"none"});
         $("#list").css({"display":"none"});
         $('#listFilters').css({"display":"none"});
         $("#submitContainer").css({"display":"block"});
-        $('#add-view').css({ "background-color":"#4a4a4a" , "border-top": "3px solid black" });
-        $('#list-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
-        $('#map-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
+        $('#add-view').css({ "background-color":"#200064" , "border-top": "3px solid black" });
+        $('#list-view').css({"color":"white", "background-color":"#400095", "border-top":"none" });
+        $('#map-view').css({"color":"white", "background-color":"#400095", "border-top":"none" });
         $(window).resize();
     });
     $('#list-view').click(function(){
@@ -188,23 +189,24 @@ $(document).ready(function(){
         $('#listFilters').css({"display":"block"});
         $("#submitContainer").css({"display":"none"});
         $("#list").css({"display":"flex"});
-        $('#map-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
-        $('#add-view').css({"color":"white", "background-color":"#212121", "border-top":"none" });
-        $('#list-view').css({ "background-color":"#4a4a4a" , "border-top": "3px solid black" });
+        $('#map-view').css({"color":"white", "background-color":"#400095", "border-top":"none" });
+        $('#add-view').css({"color":"white", "background-color":"#400095", "border-top":"none" });
+        $('#list-view').css({ "background-color":"#200064" , "border-top": "3px solid black" });
         $(window).resize();
     });
 
     
     //Hover over effects for main page buttons
     $('.page').mouseover(function(){
-        if($(this).css('background-color')!=='rgb(74, 74, 74)'){
-            $(this).css({"background-color": "#121212"});
+        if($(this).css('background-color')!=='rgb(32, 0, 100)' && $(this).css('background-color')!=='#200064' ){
+            console.log($(this).css('background-color'));
+            $(this).css({"background-color": "#6000B5"});
         }
     });
 
     $('.page').mouseout(function(){      
-        if($(this).css('background-color')!=='rgb(74, 74, 74)'){
-            $(this).css({"background-color": "#212121"});
+        if($(this).css('background-color')!=='rgb(32, 0, 100)' && $(this).css('background-color')!=='#200064'){
+            $(this).css({"background-color": "#400095"});
         }
     });
 

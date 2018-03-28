@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const url = process.env.HEROKU_RUNNING ? process.env.MONGODB_URI : 'mongodb://localhost:27017/mainsite';
+const url = process.env.HEROKU_RUNNING ? process.env.MONGODB_URI : 'mongodb://localhost:27017/restaurants';
 
 /* GET home page. */
 // Defines the root route. router.get receives a path and a function
