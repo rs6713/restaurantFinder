@@ -129,7 +129,13 @@ html, body{
         padding:0;
         margin:0;
     }
-
+    #restaurantPopUp #popHeader{
+        font-size: 10px;
+    }
+    #mapContainer #restaurantPopUp #popHeader h1{
+        margin-right: 0em; 
+        font-size: 20px;
+    }
 
 }
 
@@ -1155,7 +1161,7 @@ a{
     position:absolute;
     left:0;
     top:5px;
-    max-width:80%;
+    /*max-width:80%;*/
     box-shadow: 10px -11px 20px 0.01px rgba(33, 33, 33, 0.2);/* 10px -10px 30px 0.5px rgba(33, 33, 33, 0.3);*/
     /*
     border-top: 5px solid #3a3a3a;
@@ -1166,7 +1172,7 @@ a{
     background-color:white;
     transform: translateY(-100%);
     height:4.3em;
-    z-index:100;
+    /*z-index:100;*/
     padding: 0em 0em 0em 2em;
 }
 #restaurantPopUp #popHeader h1{
