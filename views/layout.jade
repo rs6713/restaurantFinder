@@ -35,7 +35,7 @@ html(ng-app="eaHelper")
 
     script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js")
-    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.js")
     //-Angular Material Library 
     script(src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js")
     
@@ -140,6 +140,8 @@ html(ng-app="eaHelper")
                   md-divider
                   span 
                     b {{item.address}}
+                    br
+                    a(href="https://{{item.website}}", target="_blank") {{item.website}}
                 
                 div#props
                   div#circlePercent(back-imglist="{{item.avgRating}}")
@@ -157,7 +159,7 @@ html(ng-app="eaHelper")
                      
                 div#listButtons
                   //md-button(ng-click="showActionToast(item.name)") Delete  
-                  md-button(ng-click="changeChosenRestaurant(item.name); toggleBtn('Info')" , onclick="popRestList('info')") Info
+                  md-button(ng-click="changeChosenRestaurant(item.name); toggleBtn('Info')" , onclick="popRestList('info')") View
                   md-button(ng-click="changeChosenRestaurant(item.name);toggleBtn('Edit')" , onclick="popRestList('edit')") Edit
                   md-button(ng-click="changeChosenRestaurant(item.name)" , onclick="popRestList('review')") Review
           
@@ -182,37 +184,60 @@ html(ng-app="eaHelper")
                         div(flex="100", flex-gt-sm="50", layout="column")                 
                           md-input-container.md-block
                             label Restaurant Name
-                            input(required, type="text", name="name", ng-model="newRestaurant.name", minlength="5", maxlength="50")
-                            div(ng-messages="restaurantSubmissionForm.name.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                            input(required, type="text", name="name", ng-model="newRestaurant.name", minlength="5", md-maxlength="50")
+                            div(ng-messages="restaurantSubmissionForm.name.$error")
+                              div(ng-message="required")
+                                | The restaurant name is required.
+                              div(ng-message="minlength")
+                                | Must be at least 5 characters long.
+                              div(ng-message="md-maxlength")
+                                | Must be less than 50 characters long.
+                              //div(ng-message-exp="['required', 'md-minlength', 'md-maxlength']")
                                 | The restaurant name must be between 5 and 50 characters long.
 
                         //Address new restaurant
                         div(flex="100", flex-gt-sm="50", layout="column")                        
                           md-input-container.md-block
                             label Restaurant Address
-                            input(required, type="text", name="address", ng-model="newRestaurant.address", minlength="5", maxlength="100")
-                            div(ng-messages="restaurantSubmissionForm.address.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
-                                | The restaurant address must be between 5 and 100 characters long.            
+                            input(required, type="text", name="address", ng-model="newRestaurant.address", minlength="5", md-maxlength="100")
+
+                            div(ng-messages="restaurantSubmissionForm.address.$error")
+                              div(ng-message="required")
+                                | The restaurant address is required.
+                              div(ng-message="minlength")
+                                | Must be at least 5 characters long.
+                              div(ng-message="md-maxlength")
+                                | Must be less than 100 characters long.          
 
                       //Website new restaurant
                       div(layout="row", layout-wrap)
                         div(flex="100", flex-gt-sm="50", layout="column") 
                           md-input-container.md-block
                             label Restaurant Website
-                            input(required, type="text", name="website", ng-model="newRestaurant.website", minlength="5", maxlength="100", ng-pattern="/^.+.+\..+.+\..+$/")
-                            div(ng-messages="restaurantSubmissionForm.website.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
+                            input(required, type="text", name="website", ng-model="newRestaurant.website", md-maxlength="100")
+                            //, ng-pattern="/^.+.+\..+.+\..+$/"
+                            div(ng-messages="restaurantSubmissionForm.website.$error")
+                              //div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
                                 | The restaurant website must be between 5 and 100 characters long.  
-
+                              div(ng-message="required")
+                                | The restaurant website is required.
+                              div(ng-message="md-maxlength")
+                                | Must be less than 100 characters long.
+                              //div(ng-message="pattern")
+                                | Must be a website format.
                         //Phone number new restaurant
                         div(flex="100", flex-gt-sm="50", layout="column")                     
                           md-input-container.md-block
                             label Restaurant Phone Number
-                            input(required, type="text", name="phone", ng-model="newRestaurant.phone",ng-pattern="/^[0-9]+$/", minlength="11", maxlength="30")
-                            div(ng-messages="restaurantSubmissionForm.phone.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
+                            input(required, type="text", name="phone", ng-model="newRestaurant.phone",ng-pattern="/^[0-9]+$/", minlength="11")
+                            div(ng-messages="restaurantSubmissionForm.phone.$error")
+                              div(ng-message="required")
+                                | The restaurant phone number is required.
+                              div(ng-message="minlength")
+                                | Must be at least 11 numbers long.
+                              div(ng-message="pattern")
+                                | Must be numerical.  
+                              //div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
                                 | The restaurant phone number must be 11 numbers long.  
                       br 
                       br
@@ -224,49 +249,50 @@ html(ng-app="eaHelper")
                       div(layout="row", layout-wrap)
                         div(flex="100", flex-gt-sm="33", layout="column")                                  
                           //chips showing all contents of new restaurant cuisine
-                          md-input-container(name="area", class="md-block", flex-gt-sm).droppy
+                          md-input-container( class="md-block", flex-gt-sm).droppy
                             label Area
-                            md-select( ng-model="newRestaurant.area", required).enter-detail
+                            md-select( ng-model="newRestaurant.area", name="area",required).enter-detail
                               md-option(ng-repeat="item in areaOptions", ng-value="'{{item.name}}'")
                                 {{ item.name}}
-                            div(ng-messages="newRestaurant.area.length==0")
+                            div(ng-messages="restaurantSubmissionForm.area.$error") 
+                              //- /"newRestaurant.area.length==0"
                               div(ng-message="required") This field is required
                     
                         //Price new restaurant
                         div(flex="100", flex-gt-sm="33", layout="column")      
-                          md-input-container(name="price", class="md-block", flex-gt-sm).droppy
+                          md-input-container( class="md-block", flex-gt-sm).droppy
                             label Price
-                            md-select( ng-model="newRestaurant.price", required)
+                            md-select( ng-model="newRestaurant.price",name="price", required)
                               md-option(ng-repeat="item in priceOptions", ng-value="'{{item}}'")
                                 {{ item}}  
-                            div(ng-messages="newRestaurant.price.length==0")
+                            div(ng-messages="restaurantSubmissionForm.price.$error")
                               div(ng-message="required") This field is required                        
                         //Outdoor Seating new restaurant
                         div(flex="100", flex-gt-sm="33", layout="column") 
-                          md-input-container(name="outdoor", class="md-block", flex-gt-sm).droppy
+                          md-input-container( class="md-block", flex-gt-sm).droppy
                             label Outdoor Seating
-                            md-select( ng-model="newRestaurant.outdoorSeating", required)
+                            md-select( ng-model="newRestaurant.outdoorSeating", required, name="outdoor")
                               md-option(ng-repeat="item in outdoorSeatingOptions", ng-value="'{{item}}'")
                                 {{ item}}  
-                            div(ng-messages="newRestaurant.outdoorSeating.length==0")
-                              div(ng-message="required") This field is required                      
+                            div(ng-messages="restaurantSubmissionForm.outdoor.$error")
+                              div(ng-message="required") This field is required  
+
                       //Occasions new restaurant
                       div(layout="row", layout-wrap)
                         div(flex="100", flex-gt-sm="50", layout="column").mdinputpadding
                             div
-                              fieldset.standard
+                              fieldset.standard(name="occasion", required)
                                 div(layout="row", layout-wrap, flex)
                                   div( flex="50", ng-repeat="item in occasionOptions")
                                     md-checkbox( ng-checked="exists(item.name, newRestaurant.occasion)" ng-click="toggle(item.name, newRestaurant.occasion)", class="md-secondary")
                                     {{ item.name }} 
-                                  div(ng-messages="newRestaurant.occasion.length==0")
-                                    div(ng-message="required") This field is required
+                              div(ng-show="newRestaurant.occasion.length==0").customError
+                                | This field is required
 
                         //Cuisines new restaurant
                         div(flex="100", flex-gt-sm="50", layout="column").mdinputpadding
                             div
-                              md-chips(ng-model="newRestaurant.cuisine", md-removable="true",
-                              md-transform-chip="undefined", md-require-match="false", required)
+                              md-chips(ng-model="newRestaurant.cuisine", md-removable="true", ng-required="true", md-transform-chip="undefined", md-require-match="false", required, name="cuisines")
                                 md-autocomplete(
                                 md-autocomplete-snap, 
                                 md-items="item in querySearch(searchText, 'cat')", 
@@ -281,7 +307,12 @@ html(ng-app="eaHelper")
                                 md-chip-template
                                   span
                                     strong {{$chip}} 
-                              div(ng-messages="restaurantSubmissionForm.cuisine.$error")
+                              div(ng-show="newRestaurant.cuisine.length==0").customError
+                                | This field is required
+                              //div(class="md-chips-messages", ng-messages="restaurantSubmissionForm.cuisines.$error", ng-show="restaurantSubmissionForm.cuisines.$dirty || restaurantSubmissionForm.cuisines.$submitted")
+                                div(ng-message="required") At least one cuisine is required
+
+                              //div(ng-messages="restaurantSubmissionForm.cuisines.$error")
                                 div(ng-message="required") This field is required                                 
 
                       br 
@@ -296,17 +327,23 @@ html(ng-app="eaHelper")
                               md-input-container.md-block
                                 label Your Restaurant Review
                                 //ng-pattern="/^.+@.+\..+$/"
-                                input(required, type="text", name="review", ng-model="newRestaurant.review", minlength="5", maxlength="200")
-                                div(ng-messages="restaurantSubmissionForm.review.$error", role="alert")
-                                  div(ng-message-exp="['required', 'minlength', 'maxlength']")
-                                    //, 'pattern'
+                                input(required, type="text", name="review", ng-model="newRestaurant.review", minlength="5", md-maxlength="200")
+                                div(ng-messages="restaurantSubmissionForm.review.$error")
+                                  div(ng-message="required")
+                                    | The restaurant review is required.
+                                  div(ng-message="minlength")
+                                    | Must be at least 5 characters long.
+                                  div(ng-message="md-maxlength")
+                                    | Must be less than 200 characters long.  
+                                  //div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                    , 'pattern'
                                     | The restaurant review must be between 5 and 200 characters long.
                           
                         div(flex="100", flex-gt-sm="50", layout="column")
                                  
-                              div#ratingSliderContainer
-                                br
-                                rzslider#ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
+                              div.ratingSliderContainer
+                              
+                                rzslider.ratingslider(rz-slider-model="restaurantRatingSlider.value", rz-slider-options="restaurantRatingSlider.options")
                       div(flex="100", layout="column", style="position:relative")
                         div
                           md-button(type="submit",ng-click="submitRestaurant()",name="submitFormBtn",  ng-disabled="restaurantSubmissionForm.$invalid || newRestaurant.cuisine.length==0 || newRestaurant.occasion.length==0")#mainSubmit
@@ -327,7 +364,7 @@ html(ng-app="eaHelper")
                   | Edit
 
                 div#infoEdit(ng-click="toggleBtn('Info')")
-                  | Info
+                  | View
                   //i.fa.fa-info(aria-hidden="true")
                 //i#editEdit.fa.fa-pencil-square(aria-hidden="true", ng-click="toggleBtn('Edit')")
 
@@ -343,52 +380,67 @@ html(ng-app="eaHelper")
                             legend
                           md-input-container.md-block
                             label Restaurant Address
-                            input(required, ng-disabled="editRestaurantFlag", type="text", name="address", ng-model="editRestaurant.address", minlength="5", maxlength="200")
-                            div(ng-messages="restaurantEditForm.address.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                            input(required, ng-disabled="editRestaurantFlag", type="text", name="address", ng-model="editRestaurant.address", minlength="5", md-maxlength="200")
+                            div(ng-messages="restaurantEditForm.address.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="minlength")
+                                | Must be at least 5 characters long.
+                              div(ng-message="required")
+                                | The restaurant address is required.
+                              div(ng-message="md-maxlength")
+                                | Must be less than 200 characters long.
+                              //div(ng-message-exp="['required', 'minlength', 'maxlength']")
                                 | The restaurant address must be between 5 and 200 characters long.
 
                           md-input-container.md-block
                             label Restaurant Website
-                            input(ng-disabled="editRestaurantFlag",required, type="text", name="website", ng-model="editRestaurant.website", minlength="5", maxlength="100")
-                            div(ng-messages="restaurantEditForm.website.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength']")
-                                | The restaurant website must be between 5 and 100 characters long.
-                        
+                            input(ng-disabled="editRestaurantFlag",required, type="text", name="website", ng-model="editRestaurant.website", minlength="5", md-maxlength="100")
+                            div(ng-messages="restaurantEditForm.website.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="minlength")
+                                | Must be at least 5 characters long.
+                              div(ng-message="required")
+                                | The restaurant website is required.
+                              div(ng-message="md-maxlength")
+                                | Must be less than 100 characters long.
 
                           md-input-container.md-block
                             label Restaurant Phone Number
-                            input(ng-disabled="editRestaurantFlag", required, type="text", name="phone",ng-pattern="/^[0-9]+$/", ng-model="editRestaurant.phone", minlength="11", maxlength="13")
-                            div(ng-messages="restaurantEditForm.phone.$error", role="alert")
-                              div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
+                            input(ng-disabled="editRestaurantFlag", required, type="text", name="phone",ng-pattern="/^[0-9]+$/", ng-model="editRestaurant.phone", minlength="11", md-maxlength="11")
+                            div(ng-messages="restaurantEditForm.phone.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="minlength")
+                                | Must be 11 numbers long.
+                              div(ng-message="required")
+                                | The restaurant website is required.
+                              div(ng-message="pattern")
+                                | Must be numerical.
+                              //div(ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']")
                                 | The restaurant phone number must be 11 numbers long.
 
                           div(layout="row", layout-wrap).legendpadding
                             | Restaurant Type and Food
                             legend
-                          md-input-container(name="area", class="md-block")
+                          md-input-container(class="md-block")
                             label Area
-                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.area", required)
+                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.area", required, name="area")
                               md-option(ng-repeat="item in areaOptions", ng-value="'{{item.name}}'")
                                 {{ item.name}} 
-                            div(ng-messages="editRestaurant.area.length==0")
-                              div(ng-message="required") This field is required
+                            div(ng-messages="restaurantEditForm.area.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="required") This field is required  
 
-                          md-input-container(name="price", class="md-block", flex-gt-sm)
+                          md-input-container(class="md-block", flex-gt-sm)
                             label Price
-                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.price", required)
+                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.price", required, name="price")
                               md-option(ng-repeat="item in priceOptions", ng-value="'{{item}}'")
                                 {{ item}}  
-                            div(ng-messages="editRestaurant.price.length==0")
-                              div(ng-message="required") This field is required
+                            div(ng-messages="restaurantEditForm.price.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="required") This field is required  
 
-                          md-input-container(name="outdoor", class="md-block")
+                          md-input-container(class="md-block")
                             label Outdoor Seating
-                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.outdoorSeating", required)
+                            md-select(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.outdoorSeating", required, name="outdoor")
                               md-option(ng-repeat="item in outdoorSeatingOptions", ng-value="'{{item}}'")
                                 {{ item}} 
-                            div(ng-messages="editRestaurant.outdoorSeating.length==0")
-                              div(ng-message="required") This field is required
+                            div(ng-messages="restaurantEditForm.outdoor.$error", ng-show="!editRestaurantFlag")
+                              div(ng-message="required") This field is required  
 
                           fieldset.standard
                                 //legend Occasions
@@ -396,8 +448,10 @@ html(ng-app="eaHelper")
                                   div( flex="50", ng-repeat="item in occasionOptions")
                                     md-checkbox(ng-disabled="editRestaurantFlag", class="md-secondary",  ng-checked="exists(item.name, editRestaurant.occasion)", ng-click="toggle(item.name, editRestaurant.occasion)")
                                     {{ item.name }} 
-                                  div(ng-messages="editRestaurant.occasion.length==0")
+                                  div(ng-messages="editRestaurant.occasion.length==0", ng-show="editRestaurant.occasion.length==0")
                                     div(ng-message="required") This field is required
+                                div(ng-show="editRestaurant.occasion.length==0 && !editRestaurantFlag").customError
+                                  | This field is required
 
                           md-chips(ng-disabled="editRestaurantFlag", ng-model="editRestaurant.cuisine", md-removable="!editRestaurantFlag",
                           md-transform-chip="undefined", md-require-match="false")
@@ -415,7 +469,9 @@ html(ng-app="eaHelper")
                             md-chip-template
                               span
                                 {{$chip}}  
-                            div(ng-messages="editRestaurant.cuisine.length==0")
+                          div(ng-show="editRestaurant.cuisine.length==0 && !editRestaurantFlag").customError
+                            | This field is required
+                            //div(ng-messages="editRestaurant.cuisine.length==0")
                               div(ng-message="required") This field is required                  
 
                 div(flex="100", layout="column", style="position:relative", ng-if="!editRestaurantFlag")
@@ -445,13 +501,19 @@ html(ng-app="eaHelper")
                   form(name="restaurantReviewForm")
                           md-input-container.md-block
                                 label Your Restaurant Review
-                                input(required, type="text", name="review", ng-model="newReview", minlength="5", maxlength="200")
-                                div(ng-messages="newReview.$error", role="alert")
-                                  div(ng-message-exp="['required', 'minlength', 'maxlength']")
+                                input(required, type="text", name="review", ng-model="newReview", minlength="5", md-maxlength="200")
+                                div(ng-messages="restaurantReviewForm.review.$error")
+                                  div(ng-message="minlength")
+                                    | Must be at least 5 characters long.
+                                  div(ng-message="required")
+                                    | The restaurant review is required.
+                                  div(ng-message="md-maxlength")
+                                    | Must be less than 200 characters long.
+                                  //div(ng-message-exp="['required', 'minlength', 'maxlength']")
                                     | The restaurant review must be between 5 and 200 characters long.
                           
-                          div#ratingSliderContainer
-                            rzslider#ratingslider(rz-slider-model="restaurantReviewSlider.value", rz-slider-options="restaurantReviewSlider.options")
+                          div.ratingSliderContainer
+                            rzslider.ratingslider(rz-slider-model="restaurantReviewSlider.value", rz-slider-options="restaurantReviewSlider.options")
                   
                   div( style="position:relative") 
                       md-button#mainSubmit(type="submit", ng-click="submitRestaurantReview()",  ng-disabled="restaurantReviewForm.review.$invalid")

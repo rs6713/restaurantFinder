@@ -123,7 +123,7 @@ html, body{
     }
     #filters{
         padding:0 0 10vh 0;
-        
+        border-bottom: 5px solid #400095;
     }
     #views{
         padding:0;
@@ -493,7 +493,7 @@ a, a:hover, a:active{
         
     }
         #mapContainer #submitContainer{
-            display:none;
+           
             width:100%;
             height:100%;
             padding:2em;
@@ -528,7 +528,7 @@ a, a:hover, a:active{
         #mapContainer #submit tr:last-child button{
             float:right;
         }
-            #ratingslider{
+            .ratingslider{
                 width:100%;
                 position:relative;
                 
@@ -549,10 +549,11 @@ a, a:hover, a:active{
                     margin-top:0;
                     margin-left:1em;
                 }
-            #ratingSliderContainer {
+            .ratingSliderContainer {
                 position:relative;
             }
 
+            
             #submit .rz-pointer, #reviews .rz-pointer{
                 width:1em;
                 height:1em;
@@ -579,6 +580,7 @@ a, a:hover, a:active{
                 background-color:#400095;
                 left:-0.55em;
             }
+            
             
             #submit .rz-bubble, #reviews .rz-bubble{
                 color:#212121;
@@ -670,7 +672,7 @@ a, a:hover, a:active{
         line-height:1;
         display:inline-block;
         border-radius:100%;
-        background-color:#400095;
+        background-color:#400095;/*#400095;*/
         box-sizing:content-box;
         position:relative;
         margin-bottom:1em;
@@ -818,7 +820,7 @@ a, a:hover, a:active{
     }
     
     #restaurantPopUp #reviews{
-        display:none;
+        
         overflow-x:hidden;
         overflow-y:hidden;
         padding-bottom:3em;
@@ -1019,7 +1021,7 @@ md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-ico
 .currentReviews div{
     margin-left:0.5em;
 }
-#submit #ratingSliderContainer, #restaurantEdit #ratingSliderContainer,#reviews #ratingSliderContainer{
+#submit .ratingSliderContainer, #restaurantEdit .ratingSliderContainer,#reviews .ratingSliderContainer{
     padding: 0 0.5em 0em 0.5em;
 }
 
@@ -1144,6 +1146,10 @@ input[type="checkbox"]:checked + label:after {
     border-bottom-color: rgba(0,0,0,0.12);
     
 }
+a{
+   
+    color:#400095;
+}
 
 #restaurantPopUp #popHeader{
     position:absolute;
@@ -1214,7 +1220,7 @@ input[type="checkbox"]:checked + label:after {
 
     border-bottom-right-radius:0.5em;
     border-bottom-left-radius:0.5em;
-    background-color:#400095;
+    background-color: #400095;
     font-weight:bold;
     padding:0.6em;
     float:right;
@@ -1251,5 +1257,26 @@ input[type="checkbox"]:checked + label:after {
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
 	background-color: #AAAAAA;
 }
+
+
+md-input-container .md-auto-hide .md-input-message-animation:not(.ng-animate) {
+    opacity: 1;
+    margin-top: 0px;
+}
+md-input-container:not(.md-input-invalid) .md-auto-hide .md-input-message-animation {
+    opacity: 1;
+    margin-top: 0px;
+}
+
+md-input-container .md-input-message-animation.ng-enter, md-input-container .md-input-message-animation:not(.ng-animate), md-input-container:not(.md-input-invalid) .md-auto-hide .md-input-message-animation {
+    opacity: 1;
+    margin-top: 0px;
+}
+.customError{
+
+    font-size:12px;
+    color: rgb(221,44,0);
+}
+
 
 

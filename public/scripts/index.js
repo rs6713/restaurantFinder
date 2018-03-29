@@ -4,7 +4,7 @@ var markerArray=[];
 var price="££";
 var rating=3;
 var nbc = {lat:  51.51610, lng: -0.12728};
-var baseColor2="#400095";
+var baseColor2= "#400095"; //"#2196dc" ;//"#400095";
 
     //Initialises google map, with nbc icon at centre
     var initMap=function() {
@@ -100,6 +100,10 @@ $(window).resize(function(){
 });
 
 $(document).ready(function(){ 
+
+    $("#reviews").css({"display":"none"});
+    $("#mapContainer #submitContainer").css({"display":"none"});
+    
 
     //On initialisation, the map is in view
     $('#map-view').css({"background-color":"#200064" , "border-top": "3px solid black"});

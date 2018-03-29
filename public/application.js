@@ -2,8 +2,8 @@ var mainApplicationModuleName= 'eaHelper';
 var mainApp= angular.module(mainApplicationModuleName, ['rzModule', 'ui.bootstrap', 'ngMaterial', 'ngMessages']);
 
 
-var baseColor= "#400095"; //#3A4D9E
-var highColor= "#8000c5";//6000B5
+var baseColor=  "#400095" ; //"#2196dc"; //#3A4D9E "#400095"
+var highColor=  "#8000c5";//6000B5 "#8000c5";
 
 
 /***********Services/Factories*********************************
@@ -230,21 +230,35 @@ mainApp.controller('mainController',['$scope', '$timeout', 'areaOptions','catOpt
 
     $scope.newRestaurantArea=[];
     $scope.newRestaurantReview="";
-    $scope.restaurantRatingSlider={
-        value:1,
-        options:{
-            ceil:5,
+
+/*
+    $scope.ratings_bar = {
+        value: 1,
+        options: {
             floor:1,
+            ceil:5,
             showSelectionBar: true,
             showTicks:true,
-            getSelectionBarColor: function(val){ return basecolor}   
+            getSelectionBarColor: function(val){ return baseColor}
+        }
+    };
+    */
+
+    $scope.restaurantRatingSlider={
+        value: 1,
+        options:{
+            floor:1,
+            ceil:5,
+            showSelectionBar: true,
+            showTicks:true,
+            getSelectionBarColor: function(val){ return baseColor}   
         }
     };
     $scope.restaurantReviewSlider={
         value:3,
         options:{
-            ceil:5,
             floor:1,
+            ceil:5,
             showSelectionBar: true,
             showTicks:true,
             getSelectionBarColor: function(val){ return baseColor}
