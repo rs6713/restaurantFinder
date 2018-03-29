@@ -137,8 +137,13 @@ html, body{
         font-size: 20px;
     }
 
-}
+}                                   
 
+#restaurantEdit #restaurantEditForm #websitelink  .md-input[disabled], 
+#restaurantEdit #restaurantEditForm #websitelink .md-input{
+    color: #400095;
+    cursor:pointer;
+}
 
 #toptop{
     top:0;

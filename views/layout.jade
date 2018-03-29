@@ -392,15 +392,24 @@ html(ng-app="eaHelper")
                                 | The restaurant address must be between 5 and 200 characters long.
 
                           md-input-container.md-block
+
                             label Restaurant Website
-                            input(ng-disabled="editRestaurantFlag",required, type="text", name="website", ng-model="editRestaurant.website", minlength="5", md-maxlength="100")
-                            div(ng-messages="restaurantEditForm.website.$error", ng-show="!editRestaurantFlag")
-                              div(ng-message="minlength")
-                                | Must be at least 5 characters long.
-                              div(ng-message="required")
-                                | The restaurant website is required.
-                              div(ng-message="md-maxlength")
-                                | Must be less than 100 characters long.
+                            
+                            
+                            a(href="https://{{editRestaurant.website}}", target="_blank", ng-if="editRestaurantFlag")#websitelink 
+                              input(ng-disabled="editRestaurantFlag",  ng-if="editRestaurantFlag",type="text", name="website", ng-model="editRestaurant.website", minlength="5", md-maxlength="100")
+                          
+                              //{{editRestaurant.website}}
+                            div(ng-if="!editRestaurantFlag")
+                              input(ng-disabled="editRestaurantFlag",  ng-if="!editRestaurantFlag", required, type="text", name="website", ng-model="editRestaurant.website", minlength="5", md-maxlength="100")
+                            
+                              div(ng-messages="restaurantEditForm.website.$error", ng-show="!editRestaurantFlag")
+                                div(ng-message="minlength")
+                                  | Must be at least 5 characters long.
+                                div(ng-message="required")
+                                  | The restaurant website is required.
+                                div(ng-message="md-maxlength")
+                                  | Must be less than 100 characters long.
 
                           md-input-container.md-block
                             label Restaurant Phone Number
