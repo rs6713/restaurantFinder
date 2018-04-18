@@ -540,3 +540,10 @@ html(ng-app="eaHelper")
 
     script(async, defer, type="text/javascript",
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADp-Jxh-mAwZfWqI8bGvF25t8glrMhpRk&callback=initMap")
+    script(async, src="https://www.googletagmanager.com/gtag/js?id=UA-97239964-3")
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-97239964-3');
